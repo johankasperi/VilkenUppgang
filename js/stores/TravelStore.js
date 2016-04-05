@@ -62,3 +62,59 @@ var TravelStore = assign({}, EventEmitter.prototype, {
   }
 
 }
+
+AppDispatcher.register(function(action) {
+  var from, to, time, timeType;
+
+  switch(action.actionType) {
+    
+    case "create":
+      from = action.from.trim();
+      to = action.to.trim();
+      time = action.time;
+      timeType = action.timeType.trim();
+      if(action !== "" && to !== "" && time !== "" && timeType !== "") {
+        create(from, to, time, timeType);
+      }
+      break;
+
+    case "setFrom":
+      from = action.from.trim();
+      if(from !== "") {
+        setFrom(from);
+      }
+      break;
+
+    case "setTo":
+      to = action.to.trim();
+      if(to !== "") {
+        setTo(to);
+      }
+      break;
+
+    case "setTime":
+      time = action.time.trim();
+      if(time !== "") {
+        setTime(time);
+      }
+      break;
+
+    case "setTimeType":
+      timeType = action.timeType.trim();
+      if(timeType !== "") {
+        setTimeType(timeType);
+      }
+      break;
+
+    case "destroy":
+      from = "";
+      to = "";
+      time = "";
+      timeType = "";
+      destroy();
+      break;
+
+    default:
+
+  }
+});
