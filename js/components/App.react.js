@@ -1,34 +1,30 @@
-var React = require('react');
+import React, {
+  Component
+} from 'react-native';
+
 var DesiredTravelStore = require('../stores/DesiredTravelStore');
+var Search = require('./Search.react');
 
-var App = React.createClass({
+class App extends Component {
 
-  componentDidMount: function() {
+  componentDidMount() {
     DesiredTravelStore.addChangeListener(this._onChange);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     DesiredTravelStore.removeChangeListener(this._onChange);
-  },
+  }
 
-  /**
-   * @return {object}
-   */
-  render: function() {
+  render() {
     return (
-      <div>
-        <span>hej</span>
-      </div>
+      <Search/>
     );
-  },
+  }
 
-  /**
-   * Event handler for 'change' events coming from the TodoStore
-   */
-  _onChange: function() {
+  _onChange() {
     console.log("change");
   }
 
-});
+};
 
 module.exports = App;

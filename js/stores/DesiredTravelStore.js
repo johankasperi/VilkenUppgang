@@ -1,8 +1,8 @@
-var AppDispatcher = require('../dispatchers/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+const AppDispatcher = require('../dispatchers/AppDispatcher');
+const EventEmitter = require('events').EventEmitter;
+const assign = require('object-assign');
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
 var desiredTravel = {
   from: null,
