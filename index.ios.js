@@ -1,7 +1,6 @@
 import React, {
-var {
-  AppRegistry,
-  StyleSheet,
+  Component,
+  AppRegistry
 } from 'react-native';
 
 var App = require('./js/components/App.react');
