@@ -2,7 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 
 var CHANGE_EVENT = 'change';
 
-var travel = {
+var desiredTravel = {
   from: null,
   to: null,
   time: null,
@@ -20,23 +20,23 @@ function create(from, to, time, timeType) {
 }
 
 function setFrom(from) {
-  travel.from = from;
+  desiredTravel.from = from;
 }
 
 function setTo(to) {
-  travel.to = to;
+  desiredTravel.to = to;
 }
 
 function setTime(time) {
-  travel.time = time;
+  desiredTravel.time = time;
 }
 
 function setTimeType(timeType) {
-  travel.timeType = timeType;
+  desiredTravel.timeType = timeType;
 }
 
 function destroy() {
-  var travel = {
+  var desiredTravel = {
     from: null,
     to: null,
     time: null,
@@ -47,7 +47,7 @@ function destroy() {
 var DesiredTravelStore = assign({}, EventEmitter.prototype, {
 
   get: function() {
-    return travel;
+    return desiredTravel;
   },
 
   emitChange: function() {
@@ -68,54 +68,51 @@ AppDispatcher.register(function(action) {
   var from, to, time, timeType;
 
   switch(action.actionType) {
-    
     case "create":
       from = action.from.trim();
       to = action.to.trim();
-      time = action.time;
+      time = action.time.trim();
       timeType = action.timeType.trim();
-      if(action !== "" && to !== "" && time !== "" && timeType !== "") {
+      if (from !== '' && to !== '' && time !== '' && timeType !== '') {
         create(from, to, time, timeType);
+        DesiredTravelStore.emitChange();
       }
       break;
 
     case "setFrom":
       from = action.from.trim();
-      if(from !== "") {
+      if(from !== '') {
         setFrom(from);
+        DesiredTravelStore.emitChange();
       }
       break;
 
     case "setTo":
       to = action.to.trim();
-      if(to !== "") {
+      if(to !== '') {
         setTo(to);
+        DesiredTravelStore.emitChange();
       }
       break;
 
     case "setTime":
       time = action.time.trim();
-      if(time !== "") {
+      if(time !== '') {
         setTime(time);
+        DesiredTravelStore.emitChange();
       }
       break;
 
     case "setTimeType":
       timeType = action.timeType.trim();
-      if(timeType !== "") {
+      if(timeType !== '') {
         setTimeType(timeType);
+        DesiredTravelStore.emitChange();
       }
-      break;
-
-    case "destroy":
-      from = "";
-      to = "";
-      time = "";
-      timeType = "";
-      destroy();
       break;
 
     default:
 
   }
+
 });
