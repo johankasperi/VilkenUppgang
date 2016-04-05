@@ -111,6 +111,15 @@ AppDispatcher.register(function(action) {
       }
       break;
 
+    case "destroy":
+      from = "";
+      to = "";
+      time = "";
+      timeType = "";
+      destroy();
+      DesiredTravelStore.emitChange();
+      break;
+
     default:
 
   }
