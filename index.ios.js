@@ -19,7 +19,7 @@ class VilkenUppgang extends Component {
           Welcome to React Native!
         </Text>
         <Text style={styles.instructions}>
-          To get started, edit index.ios.js
+          Kappe suger
         </Text>
         <Text style={styles.instructions}>
           Press Cmd+R to reload,{'\n'}

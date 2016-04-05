@@ -6,7 +6,8 @@ var travel = {
   from: null,
   to: null,
   time: null,
-  timeType: "departure"
+  timeType: "departure",
+
 };
 
 function create(from, to, time, timeType) {
@@ -43,7 +44,7 @@ function destroy() {
   };
 }
 
-var TravelStore = assign({}, EventEmitter.prototype, {
+var DesiredTravelStore = assign({}, EventEmitter.prototype, {
 
   get: function() {
     return travel;
