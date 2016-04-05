@@ -1,6 +1,6 @@
 import React, {
+var {
   AppRegistry,
-  Component,
   StyleSheet,
 } from 'react-native';
 
