@@ -1,8 +1,8 @@
-
 'use strict';
  
 var React = require('react-native');
 var {
+  AppRegistry,
   StyleSheet,
   Text,
   TextInput,
@@ -12,12 +12,12 @@ var {
   Component
 } = React;
 
-var app = require('../js/components/App.react');
+var App = require('./js/components/App.react');
 
 class VilkenUppgang extends Component {
   render() {
     return (
-      <View><Text>Apa</Text></View>
+      <App />
     );
   }
 }
