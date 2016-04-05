@@ -1,15 +1,16 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-
-import React, {
+'use strict';
+ 
+var React = require('react-native');
+var {
   AppRegistry,
-  Component,
   StyleSheet,
   Text,
-  View
-} from 'react-native';
+  TextInput,
+  View,
+  TouchableHighlight,
+  Image,
+  Component
+} = React;
 
 var App = require('./js/components/App.react');
 

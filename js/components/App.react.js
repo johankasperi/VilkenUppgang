@@ -1,34 +1,38 @@
-var React = require('react');
-var DesiredTravelStore = require('../stores/DesiredTravelStore');
+'use strict';
 
-var App = React.createClass({
+var React = require('react-native');
+var {
+  StyleSheet,
+  View,
+  Text
+} = React;
 
-  componentDidMount: function() {
-    DesiredTravelStore.addChangeListener(this._onChange);
-  },
 
-  componentWillUnmount: function() {
-    DesiredTravelStore.removeChangeListener(this._onChange);
-  },
+//var DesiredTravelStore = require('../stores/DesiredTravelStore');
+var TravelStore = require('../stores/TravelStore');
+var TravelView = require('./TravelView.react');
 
-  /**
-   * @return {object}
-   */
-  render: function() {
-    return (
-      <div>
-        <span>hej</span>
-      </div>
-    );
-  },
 
-  /**
-   * Event handler for 'change' events coming from the TodoStore
-   */
-  _onChange: function() {
-    console.log("change");
+class App extends React.Component {
+  componentDidMount () {
+    //DesiredTravelStore.addChangeListener(this._onChange);
+    TravelStore.addChangeListener(this._onChange);
   }
 
-});
+  componentWillUnmount () {
+    //DesiredTravelStore.removeChangeListener(this._onChange);
+    TravelStore.removeChangeListener(this._onChange);
+  }
+  render() {
+    return (
+      //<Header />
+      <TravelView />
+      //<Footer />
+    );
+  }
+  _onChange() {
+    console.log("change");
+  }
+}
 
 module.exports = App;

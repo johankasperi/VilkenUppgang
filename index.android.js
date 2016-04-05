@@ -1,30 +1,23 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 
-import React, {
-  AppRegistry,
-  Component,
+'use strict';
+ 
+var React = require('react-native');
+var {
   StyleSheet,
   Text,
-  View
-} from 'react-native';
+  TextInput,
+  View,
+  TouchableHighlight,
+  Image,
+  Component
+} = React;
+
+var app = require('../js/components/App.react');
 
 class VilkenUppgang extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Danne äger
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <View><Text>Apa</Text></View>
     );
   }
 }
