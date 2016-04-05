@@ -1,4 +1,6 @@
+var AppDispatcher = require('../dispatchers/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
@@ -6,8 +8,7 @@ var desiredTravel = {
   from: null,
   to: null,
   time: null,
-  timeType: "departure",
-
+  timeType: "departure"
 };
 
 function create(from, to, time, timeType) {
@@ -62,7 +63,7 @@ var DesiredTravelStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   }
 
-}
+});
 
 AppDispatcher.register(function(action) {
   var from, to, time, timeType;
@@ -125,3 +126,5 @@ AppDispatcher.register(function(action) {
   }
 
 });
+
+module.exports = DesiredTravelStore;

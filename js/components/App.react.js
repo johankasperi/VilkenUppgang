@@ -17,7 +17,7 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        "hej"
+        <span>hej</span>
       </div>
     );
   },

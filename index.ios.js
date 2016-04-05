@@ -16,7 +16,7 @@ var App = require('./js/components/App.react');
 class VilkenUppgang extends Component {
   render() {
     return (
-      <App />,
+      <App />
     );
   }
 }
