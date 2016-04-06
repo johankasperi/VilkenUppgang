@@ -6,15 +6,10 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var travel = {
-  from: 'Hogdalen',
-  to: null,
-  arrivalTime: null,
-  departureTime: null
-};
+var travel = null;
 
-var setTravel = function(obj) {
-	travel = obj;
+var setTravel = function(trip) {
+	travel = trip;
 }
 
 var TravelStore = assign({}, EventEmitter.prototype, {
@@ -41,11 +36,11 @@ AppDispatcher.register(function(payload) {
 
   switch(payload.actionType) {
 
-    case "setTravel":
-      if (payload.travel !== '') {
-        setTravel(payload.travel);
-        TodoStore.emitChange();
-      }
+    case "SET_TRIP":
+    	console.log("in store");
+      // TODO: Fixa en check om tomt
+      setTravel(payload.trip);
+   	  TravelStore.emitChange();
       break;
 
     default:

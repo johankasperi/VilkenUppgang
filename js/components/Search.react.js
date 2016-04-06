@@ -3,7 +3,8 @@ import React, {
   Text,
   TextInput,
   TouchableHighlight,
-  View
+  View,
+  Navigator
 } from 'react-native';
 
 const styles = require('../styles/MainStyle');
@@ -37,6 +38,14 @@ class Search extends Component {
   }
 
   render() {
+    return (
+      <Navigator
+        renderScene={this.renderScene.bind(this)}
+        navigator={this.props.navigator} />
+    );
+  }
+
+  renderScene (route, navigator) {
     var placeItems = this.state.placeResult.map(getPlaceItems);
     return (
       <View style={styles.container}>
@@ -56,12 +65,12 @@ class Search extends Component {
             <Text style={styles.buttonText}>Tidigast åka</Text>
           </TouchableHighlight>
         </View>
-        <TouchableHighlight style={styles.button}>
+        <TouchableHighlight style={styles.button} onPress={this._goToSearchResult.bind(this)}>
           <Text style={styles.buttonText}>Sök</Text>
         </TouchableHighlight>
         {placeItems}
       </View>
-    );
+      )
   }
 
   _onChange() {
@@ -76,6 +85,12 @@ class Search extends Component {
   _setTimeType(event) {
     console.log(this);
     console.log(event.nativeEvent);
+  }
+
+  _goToSearchResult() {
+    this.props.navigator.push({
+      id: 'SearchResult'
+    });
   }
 
 };
