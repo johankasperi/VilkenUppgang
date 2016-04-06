@@ -24,7 +24,8 @@ class App extends Component {
   render() {
     return (
       <Search/>
-      //<TravelView />
+
+      ///<TravelView />
     );
   }
 
