@@ -14,6 +14,11 @@ const styles = StyleSheet.create({
     marginTop: 65,
     alignItems: 'center'
   },
+  flowRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'stretch'
+  },
   buttonText: {
     fontSize: 18,
     color: 'white',
@@ -24,8 +29,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
+    marginBottom: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
+  },
+  buttonInactive: {
+    height: 36,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#AAAAAA',
     marginBottom: 10,
     alignSelf: 'stretch',
     justifyContent: 'center'
@@ -33,7 +45,6 @@ const styles = StyleSheet.create({
   searchInput: {
     height: 36,
     padding: 4,
-    marginRight: 5,
     flex: 4,
     fontSize: 18,
     borderWidth: 1,

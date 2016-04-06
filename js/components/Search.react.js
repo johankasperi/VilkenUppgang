@@ -10,10 +10,10 @@ const styles = require('../styles/MainStyle');
 const PlatsuppslagActions = require('../actions/PlatsuppslagActions');
 const PlacesStore = require('../stores/PlacesStore');
 
-function getSearchItems(resultItem) {
+function getPlaceItems(place) {
   return (
     <Text>
-      {resultItem.Name}
+      {place.Name}
     </Text>
   );
 }
@@ -23,7 +23,7 @@ class Search extends Component {
     super(props);
     this.state = {
       searchString: '',
-      searchResult: []
+      placeResult: []
     };
     this._onChange = this._onChange.bind(this)
   }
@@ -37,7 +37,7 @@ class Search extends Component {
   }
 
   render() {
-    var searchResult = this.state.searchResult.map(getSearchItems);
+    var placeItems = this.state.placeResult.map(getPlaceItems);
     return (
       <View style={styles.container}>
         <TextInput
@@ -48,22 +48,34 @@ class Search extends Component {
           style={styles.searchInput}
           onChange={this._search.bind(this)}
           placeholder='Till'/>
+        <View style={styles.flowRight}>
+          <TouchableHighlight style={styles.button}>
+            <Text style={styles.buttonText}>Senast framme</Text>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.buttonInactive} key={"departure"} onPress={this._setTimeType.bind(this)}>
+            <Text style={styles.buttonText}>Tidigast åka</Text>
+          </TouchableHighlight>
+        </View>
         <TouchableHighlight style={styles.button}>
           <Text style={styles.buttonText}>Sök</Text>
         </TouchableHighlight>
-        {searchResult}
+        {placeItems}
       </View>
     );
   }
 
   _onChange() {
-    console.log(PlacesStore.getAll());
-    this.setState({searchResult: PlacesStore.getAll() });
+    this.setState({placeResult: PlacesStore.getAll() });
   }
 
   _search(event) {
     this.setState({searchString: event.nativeEvent.text });
     PlatsuppslagActions.search(this.state.searchString);
+  }
+
+  _setTimeType(event) {
+    console.log(this);
+    console.log(event.nativeEvent);
   }
 
 };
