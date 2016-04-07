@@ -6,8 +6,9 @@ import React, {
   Navigator
 } from 'react-native';
 
-const Search = require('./Search.react');
-const styles = require('../styles/MainStyle');
+var Trip = require('./Trip.react');
+var Search = require('./Search.react');
+var Trips = require('./Trips.react');
 
 class App extends Component {
 

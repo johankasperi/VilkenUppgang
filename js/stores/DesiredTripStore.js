@@ -13,17 +13,15 @@ var desiredTrip = {
     name: null,
     id: null
   },
-  date: null,
-  time: null,
+  date: new Date(),
   timeType: "departure"
 };
 
-function create(from, to, date, time, timeType) {
+function create(from, to, date, timeType) {
   desiredTrip = {
     from: from,
     to: to,
     date: date,
-    time: time,
     timeType: timeType
   };
 }
@@ -40,10 +38,6 @@ function setDate(date) {
   desiredTrip.date = date;
 }
 
-function setTime(time) {
-  desiredTrip.time = time;
-}
-
 function setTimeType(timeType) {
   desiredTrip.timeType = timeType;
 }
@@ -52,8 +46,7 @@ function destroy() {
   var desiredTrip = {
     from: null,
     to: null,
-    date: null,
-    time: null,
+    date: new Date(),
     timeType: "departure"
   };
 }
@@ -62,6 +55,23 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
 
   get: function() {
     return desiredTrip;
+  },
+
+  getFormattedDate: function() {
+    var year = desiredTrip.date.getFullYear();
+    var month = desiredTrip.date.getMonth()+1;
+    month = month > 9 ? month : "0" + month.toString();
+    var day = desiredTrip.date.getDate();
+    day = day > 9 ? day : "0" + day.toString();
+    return year + '-' + month + '-' + day;
+  },
+
+  getFormattedTime: function() {
+    var hours = desiredTrip.date.getHours();
+    hours = hours > 9 ? hours : "0" + hours.toString();
+    var minutes = desiredTrip.date.getMinutes();
+    minutes = minutes > 9 ? minutes : "0" + minutes.toString();
+    return hours + ':' + minutes;
   },
 
   emitChange: function() {
@@ -86,10 +96,9 @@ AppDispatcher.register(function(action) {
       from = action.from;
       to = action.to;
       date = action.date;
-      time = action.time.trim();
       timeType = action.timeType.trim();
-      if (from !== null && to !== null && date !== '' && time !== '' && timeType !== '') {
-        create(from, fromId, to, toId, date, time, timeType);
+      if (from !== null && to !== null && date !== '' && timeType !== '') {
+        create(from, fromId, to, toId, date, timeType);
         DesiredTripStore.emitChange();
       }
       break;
@@ -111,24 +120,16 @@ AppDispatcher.register(function(action) {
       break;
 
     case "setDate":
-      date = action.time;
-      if(date !== '') {
+      date = action.date;
+      if(date !== null) {
         setDate(date);
-        DesiredTripStore.emitChange();
-      }
-      break;
-
-    case "setTime":
-      time = action.time.trim();
-      if(time !== '') {
-        setTime(time);
         DesiredTripStore.emitChange();
       }
       break;
 
     case "setTimeType":
       timeType = action.timeType.trim();
-      if(timeType !== '') {
+      if(timeType !== null) {
         setTimeType(timeType);
         DesiredTripStore.emitChange();
       }

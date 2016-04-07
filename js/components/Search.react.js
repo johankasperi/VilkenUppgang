@@ -16,6 +16,17 @@ const styles = require('../styles/MainStyle');
 const PlatsuppslagActions = require('../actions/PlatsuppslagActions');
 const DesiredTripStore = require('../stores/DesiredTripStore');
 const PlaceSearch = require('./PlaceSearch.react')
+const PlacesStore = require('../stores/PlacesStore');
+const Trips = require('../components/Trips.react');
+
+
+function getPlaceItems(place) {
+  return (
+    <Text>
+      {place.Name}
+    </Text>
+  );
+}
 
 class Search extends Component {
   constructor(props) {
@@ -28,7 +39,9 @@ class Search extends Component {
       placeType: "from",
       departure: false,
       arrival: true,
-      date: new Date(),
+      date: DesiredTripStore.get().date,
+      formattedDate: DesiredTripStore.getFormattedDate(),
+      formattedTime: DesiredTripStore.getFormattedTime(),
     };
 
     this.picker = null;
@@ -49,6 +62,7 @@ class Search extends Component {
     var titleConfig = {
       title: 'Sök resa',
     };
+
     return (
       <View style={styles.nav}>
         <NavigationBar
@@ -76,20 +90,20 @@ class Search extends Component {
             </TouchableHighlight>
           </View>
           <View style={styles.flowRight}>
-            <TouchableHighlight style={styles.button, styles.buttonActive} onPress={this._showDatePicker}>
-              <Text style={styles.buttonText}>showDatePicker</Text>
+            <TouchableHighlight style={[styles.button, styles.buttonActive]} onPress={this._showDatePicker}>
+              <Text style={styles.buttonText}>{this.state.formattedDate}</Text>
             </TouchableHighlight>
-            <TouchableHighlight style={styles.button, styles.buttonActive} onPress={this._showTimePicker}>
-              <Text style={styles.buttonText}>showTimePicker</Text>
+            <TouchableHighlight style={[styles.button, styles.buttonActive]} onPress={this._showTimePicker}>
+              <Text style={styles.buttonText}>{this.state.formattedTime}</Text>
             </TouchableHighlight>
           </View>
-          <TouchableHighlight style={[styles.button, styles.buttonActive]}>
+          <TouchableHighlight style={[styles.button, styles.buttonActive]} onPress={this._goToSearchResult.bind(this)}>
             <Text style={styles.buttonText}>Sök</Text>
           </TouchableHighlight>
           <DateTimePicker cancelText="Cancel" okText="Done" ref={(picker)=>{this.picker = picker}} />
         </View>
       </View>
-    );
+    )
   }
 
   _searchFrom(event) {
@@ -124,21 +138,33 @@ class Search extends Component {
 
   _showDatePicker() {
     var date = this.state.date;
-    this.picker.showDatePicker(date, (d)=>{
-      this.setState({date:d});
+    this.picker.showDatePicker(date, (d) => {
+      AppDispatcher.dispatch({ actionType: "setDate", date: d });
+      this.setState({ date: d });
     });
   }
 
   _showTimePicker() {
     var date = this.state.date;
-    this.picker.showTimePicker(date, (d)=>{
-      this.setState({date:d});
+    this.picker.showTimePicker(date, (d) => {
+      AppDispatcher.dispatch({ actionType: "setDate", date: d });
+      this.setState({ date: d });
+    });
+  }
+
+  _goToSearchResult() {
+    this.props.navigator.push({
+      sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
+      component: Trips
     });
   }
 
   _onChange() {
-    var from = DesiredTripStore.get().from;
-    var to = DesiredTripStore.get().to;
+    var desiredTrip = DesiredTripStore.get();
+    this.setState({ formattedDate: DesiredTripStore.getFormattedDate() });
+    this.setState({ formattedTime: DesiredTripStore.getFormattedTime() });
+    var from = desiredTrip.from;
+    var to = desiredTrip.to;
     if(from.name !== null) {
       this.setState({ from: from.name });
     }
