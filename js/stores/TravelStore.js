@@ -6,7 +6,7 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var travel = {
+var travels = {
   from: 'Hogdalen',
   to: null,
   arrivalTime: null,

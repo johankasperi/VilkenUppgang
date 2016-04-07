@@ -4,51 +4,64 @@ const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
-var desiredTravel = {
-  from: null,
-  to: null,
+var desiredTrip = {
+  from: {
+    name: null,
+    id: null
+  },
+  to: {
+    name: null,
+    id: null
+  },
+  date: null,
   time: null,
   timeType: "departure"
 };
 
-function create(from, to, time, timeType) {
-  travel = {
+function create(from, to, date, time, timeType) {
+  desiredTrip = {
     from: from,
     to: to,
+    date: date,
     time: time,
     timeType: timeType
   };
 }
 
 function setFrom(from) {
-  desiredTravel.from = from;
+  desiredTrip.from = from;
 }
 
 function setTo(to) {
-  desiredTravel.to = to;
+  desiredTrip.to = to;
+}
+
+function setDate(date) {
+  desiredTrip.date = date;
 }
 
 function setTime(time) {
-  desiredTravel.time = time;
+  desiredTrip.time = time;
 }
 
 function setTimeType(timeType) {
-  desiredTravel.timeType = timeType;
+  desiredTrip.timeType = timeType;
 }
 
 function destroy() {
-  var desiredTravel = {
+  var desiredTrip = {
     from: null,
     to: null,
+    date: null,
     time: null,
     timeType: "departure"
   };
 }
 
-var DesiredTravelStore = assign({}, EventEmitter.prototype, {
+var DesiredTripStore = assign({}, EventEmitter.prototype, {
 
   get: function() {
-    return desiredTravel;
+    return desiredTrip;
   },
 
   emitChange: function() {
@@ -66,33 +79,42 @@ var DesiredTravelStore = assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function(action) {
-  var from, to, time, timeType;
+  var from, to, date, time, timeType;
 
   switch(action.actionType) {
     case "create":
-      from = action.from.trim();
-      to = action.to.trim();
+      from = action.from;
+      to = action.to;
+      date = action.date;
       time = action.time.trim();
       timeType = action.timeType.trim();
-      if (from !== '' && to !== '' && time !== '' && timeType !== '') {
-        create(from, to, time, timeType);
-        DesiredTravelStore.emitChange();
+      if (from !== null && to !== null && date !== '' && time !== '' && timeType !== '') {
+        create(from, fromId, to, toId, date, time, timeType);
+        DesiredTripStore.emitChange();
       }
       break;
 
     case "setFrom":
-      from = action.from.trim();
-      if(from !== '') {
+      from = action.from;
+      if(from.id !== null && from.name !== null) {
         setFrom(from);
-        DesiredTravelStore.emitChange();
+        DesiredTripStore.emitChange();
       }
       break;
 
     case "setTo":
-      to = action.to.trim();
-      if(to !== '') {
+      to = action.to;
+      if(to.id !== null && to.name !== null) {
         setTo(to);
-        DesiredTravelStore.emitChange();
+        DesiredTripStore.emitChange();
+      }
+      break;
+
+    case "setDate":
+      date = action.time;
+      if(date !== '') {
+        setDate(date);
+        DesiredTripStore.emitChange();
       }
       break;
 
@@ -100,7 +122,7 @@ AppDispatcher.register(function(action) {
       time = action.time.trim();
       if(time !== '') {
         setTime(time);
-        DesiredTravelStore.emitChange();
+        DesiredTripStore.emitChange();
       }
       break;
 
@@ -108,17 +130,18 @@ AppDispatcher.register(function(action) {
       timeType = action.timeType.trim();
       if(timeType !== '') {
         setTimeType(timeType);
-        DesiredTravelStore.emitChange();
+        DesiredTripStore.emitChange();
       }
       break;
 
     case "destroy":
-      from = "";
-      to = "";
-      time = "";
-      timeType = "";
+      from = null;
+      to = null;
+      date = null;
+      time = null;
+      timeType = null
       destroy();
-      DesiredTravelStore.emitChange();
+      DesiredTripStore.emitChange();
       break;
 
     default:
@@ -127,4 +150,4 @@ AppDispatcher.register(function(action) {
 
 });
 
-module.exports = DesiredTravelStore;
+module.exports = DesiredTripStore;
