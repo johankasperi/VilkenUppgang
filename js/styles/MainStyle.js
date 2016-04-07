@@ -3,6 +3,14 @@ import React, {
 } from 'react-native';
 
 const styles = StyleSheet.create({
+  navBar: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC'
+  },
+  nav: {
+    flex: 1,
+  },
   description: {
     marginBottom: 20,
     fontSize: 18,
@@ -28,28 +36,41 @@ const styles = StyleSheet.create({
     height: 36,
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#48BBEC',
-    marginBottom: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
-  },
-  buttonInactive: {
-    height: 36,
-    flex: 1,
-    flexDirection: 'row',
     backgroundColor: '#AAAAAA',
     marginBottom: 10,
+    padding: 3,
     alignSelf: 'stretch',
     justifyContent: 'center'
   },
+  buttonActive: {
+    backgroundColor: '#48BBEC',
+  },
   searchInput: {
+    alignSelf: 'stretch',
     height: 36,
     padding: 4,
-    flex: 4,
+    marginBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#CCCCCC',
+  },
+  searchInputText: {
+    color: '#CCCCCC',
     fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#48BBEC',
+  },
+  searchInputActive: {
     color: '#48BBEC'
+  },
+  list: {
+    alignSelf: 'stretch',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  searchListRow: {
+    alignSelf: 'stretch',
+    height: 36,
+  },
+  searchListRowText: {
+    fontSize: 18
   }
 });
 
