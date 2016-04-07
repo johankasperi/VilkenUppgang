@@ -28,7 +28,7 @@ module.exports = {
 		fetch(query, {method: "GET"})
 	    .then((response) => response.json())
 	    .then((responseData) => {
-	        AppDispatcher.dispatch({actionType: "GET_TRIP", state: "ready", data: responseData});
+	        AppDispatcher.dispatch({actionType: "GET_TRIPS", state: "ready", data: responseData});
 	    })
 	    .done();
 	},

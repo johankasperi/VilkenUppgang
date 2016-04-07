@@ -5,8 +5,8 @@ const assign = require('object-assign');
 const CHANGE_EVENT = 'change';
 
 var desiredTravel = {
-  from: 9181,
-  to: 1002,
+  from: 9192,
+  to: 9305,
   date: null,
   time: null,
   timeType: "departure"
