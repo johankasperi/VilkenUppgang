@@ -10,6 +10,8 @@ import React, {
 const styles = require('../styles/MainStyle');
 const PlatsuppslagActions = require('../actions/PlatsuppslagActions');
 const PlacesStore = require('../stores/PlacesStore');
+const Trips = require('../components/Trips.react');
+
 
 function getPlaceItems(place) {
   return (
@@ -89,9 +91,11 @@ class Search extends Component {
 
   _goToSearchResult() {
     this.props.navigator.push({
-      id: 'SearchResult'
+      sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
+      component: Trips
     });
   }
+
 
 };
 

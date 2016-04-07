@@ -9,6 +9,7 @@ var {
 } = React;
 
 var TripActions = require('../actions/TripActions');
+var TripStore = require('../stores/TripStore');
 
 
 class SearchResult extends React.Component {
@@ -16,10 +17,16 @@ class SearchResult extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			trips: TripActions.getTrips()
+			SearchResult: TripActions.getTrips()
 		}
-		console.log(this.state.trips);
+	}
 
+	componentDidMount() {
+      TripStore.addChangeListener(this._onChange);
+  	}
+
+	componentWillUnmount() {
+	  TripStore.removeChangeListener(this._onChange);
 	}
 
 	render() {
@@ -32,8 +39,14 @@ class SearchResult extends React.Component {
 
 	renderScene(route, navigator) {
 		return (
-			<View style={styles.container}><Text>{this.state.trips}</Text></View>
+			<View style={styles.container}><Text>SearchResult</Text></View>
 		)
+	}
+
+	_onChange() {
+		this.state.SearchResult = TripActions.getTrips();
+		console.log(this.state.trips);
+
 	}
 
 }

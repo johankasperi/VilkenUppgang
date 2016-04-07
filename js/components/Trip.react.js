@@ -8,18 +8,17 @@ var {
 	Navigator
 } = React;
 
-var TravelStore = require('../stores/TravelStore');
+var TripStore = require('../stores/TripStore');
 
 var TripActions = require('../actions/TripActions');
 
 
-class TravelView extends React.Component {
+class Trip extends React.Component {
 
 	constructor(props) {
-	  TripActions.setTrip();
 	  super(props);
 	  this.state = {
-	    travel: TravelStore.get()
+	    travel: TripStore.getTrip()
 	  };
 	  this._onChange = this._onChange.bind(this);
 	}
@@ -66,4 +65,4 @@ const styles = StyleSheet.create({
   }
 });
 
-module.exports = TravelView;
+module.exports = Trip;

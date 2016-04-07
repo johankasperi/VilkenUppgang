@@ -6,16 +6,20 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var travel = null;
+var _trips = {};
 
-var setTravel = function(trip) {
-	travel = trip;
+var setTrips = function(trips) {
+	_trips = trips;
 }
 
-var TravelStore = assign({}, EventEmitter.prototype, {
+var TripStore = assign({}, EventEmitter.prototype, {
   
-  get: function() {
-    return travel;
+  getAll: function() {
+    return _trips;
+  },
+
+  getTrip: function(idx) {
+  	return _trips[idx];
   },
 
   emitChange: function() {
@@ -36,11 +40,11 @@ AppDispatcher.register(function(payload) {
 
   switch(payload.actionType) {
 
-    case "SET_TRIP":
+    case "GET_TRIPS":
     	console.log("in store");
       // TODO: Fixa en check om tomt
-      setTravel(payload.trip);
-   	  TravelStore.emitChange();
+      setTrips(payload.data);
+   	  TripStore.emitChange();
       break;
 
     default:
@@ -48,4 +52,4 @@ AppDispatcher.register(function(payload) {
   }
 });
 
-module.exports = TravelStore;
+module.exports = TripStore;
