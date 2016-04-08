@@ -57,8 +57,7 @@ class Trips extends React.Component {
   	}
 
   	tripChanges(trip) {
-  		var changes = ""; ÷…  LPÖÅ-
-  	¨ÅZ<
+  		var changes = "";
   		for(var i=0; i<trip.length;i++) {
   			changes = changes + trip[i].type + " - ";
   		}
