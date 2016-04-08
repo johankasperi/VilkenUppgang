@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     color: '#656565'
   },
   container: {
-    padding: 30,
+    padding: 10,
     marginTop: 65,
     alignItems: 'center'
   },
@@ -71,6 +71,9 @@ const styles = StyleSheet.create({
   },
   searchListRowText: {
     fontSize: 18
+  },
+  datePickerWrap: {
+    flex: 1
   }
 });
 

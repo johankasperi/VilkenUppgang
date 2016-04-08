@@ -3,12 +3,13 @@
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 const apiKey = '886e10690ad4421b96ee3f53945a84cd';
 
-var DesiredTravelStore = require('../stores/DesiredTravelStore');
-var trip = DesiredTravelStore.get();
+var DesiredTripStore = require('../stores/DesiredTripStore');
 
 module.exports = {
 
 	getTrips: function() {
+		var trip = DesiredTripStore.get();
+
 		if(trip.from == null || trip.to == null) {
 			return;
 		}
@@ -20,9 +21,9 @@ module.exports = {
 			searchForArrival = 1;
 		}
 		var query = "http://api.sl.se/api2/TravelplannerV2/trip.json?key=" + apiKey;
-		query = query + "&originId=" + trip.from + "&destId=" + trip.to + "&searchForArrival=" + searchForArrival;
-		if(trip.date != null && trip.time != null) {
-			query = query + "&date=" + trip.date + "&time=" + trip.time;
+		query = query + "&originId=" + trip.from.id + "&destId=" + trip.to.id + "&searchForArrival=" + searchForArrival;
+		if(trip.date != null) {
+			query = query + "&date=" + DesiredTripStore.getFormattedDate() + "&time=" + DesiredTripStore.getFormattedTime();
 		}
 		console.log(query);
 		fetch(query, {method: "GET"})

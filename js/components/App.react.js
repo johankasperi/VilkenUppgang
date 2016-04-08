@@ -2,11 +2,10 @@
 
 import React, {
   Component,
+  View,
   Navigator
 } from 'react-native';
 
-var DesiredTravelStore = require('../stores/DesiredTravelStore');
-var TripStore = require('../stores/TripStore');
 var Trip = require('./Trip.react');
 var Search = require('./Search.react');
 var Trips = require('./Trips.react');
