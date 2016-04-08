@@ -60,21 +60,20 @@ class PlaceSearch extends Component {
           onPress={()=>this._removeFavorite(rowData)}>
           <Text style={styles.buttonText}>Favorite</Text>
         </TouchableOpacity>
-        <Text 
-          style={styles.searchListRowText} 
+        <TouchableOpacity 
           onPress={()=>this._setPlace(rowData)}>
-          {rowData.name}
-        </Text>
+          <Text style={styles.searchListRowText} >{rowData.name}</Text>
+        </TouchableOpacity>
       </View>
     )
   }
 
   _setPlace(data) {
     if(this.state.placeType === "from") {
-      AppDispatcher.dispatch({actionType: "setFrom", from: {id: data.id, name: data.name}});
+      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETFROM", from: {id: data.id, name: data.name}});
     }
     else {
-      AppDispatcher.dispatch({actionType: "setTo", to: {id: data.id, name: data.name}});
+      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETTO", to: {id: data.id, name: data.name}});
     }
     this._closeView();
   }

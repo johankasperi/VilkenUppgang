@@ -1,63 +1,85 @@
+const _ = require('underscore');
+const AsyncStorage = require('react-native').AsyncStorage;
 const AppDispatcher = require('../dispatchers/AppDispatcher');
 const EventEmitter = require('events').EventEmitter;
 const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
+const TRIPS_STORAGE_KEY = '@VilkenUppgang:searchedTrips';
 
-var desiredTrip = {
-  from: {
-    name: null,
-    id: null
-  },
-  to: {
-    name: null,
-    id: null
-  },
-  date: new Date(),
-  timeType: "departure"
-};
+var desiredTrips = [];
+var storedDesiredTrips = [];
+var activeTripIndex = null;
 
-function create(from, to, date, timeType) {
-  desiredTrip = {
-    from: from,
-    to: to,
-    date: date,
-    timeType: timeType
-  };
+function create() {
+  desiredTrips.push({
+    id: desiredTrips.length,
+    from: {
+      name: null,
+      id: null
+    },
+    to: {
+      name: null,
+      id: null
+    },
+    date: new Date(),
+    timeType: "departure",
+  });
+  activeTripIndex = desiredTrips.length - 1;
 }
 
 function setFrom(from) {
-  desiredTrip.from = from;
+  desiredTrips[activeTripIndex].from = from;
 }
 
 function setTo(to) {
-  desiredTrip.to = to;
+  desiredTrips[activeTripIndex].to = to;
 }
 
 function setDate(date) {
-  desiredTrip.date = date;
+  desiredTrips[activeTripIndex].date = date;
 }
 
 function setTimeType(timeType) {
-  desiredTrip.timeType = timeType;
+  desiredTrips[activeTripIndex].timeType = timeType;
 }
 
 function destroy() {
-  var desiredTrip = {
-    from: null,
-    to: null,
-    date: new Date(),
-    timeType: "departure"
-  };
+  desiredTrips.splice(activeTripIndex, 1);
+  create();
+}
+
+function loadTrips(callback) {
+  AsyncStorage.getItem(TRIPS_STORAGE_KEY, function(error, result) {
+    if(result !== null) {
+      storedDesiredTrips = JSON.parse(result);
+      callback();
+    }
+  });
+}
+
+function saveTrips() {
+  storedDesiredTrips = desiredTrips;
+  _.each(desiredTrips, function(trip) { trip.isStored = true; });
+  AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(desiredTrips), function(error) {});
 }
 
 var DesiredTripStore = assign({}, EventEmitter.prototype, {
 
   get: function() {
-    return desiredTrip;
+    return desiredTrips[activeTripIndex];
+  },
+
+  getAll: function() {
+    return desiredTrips;
+  },
+
+  getAllStored: function() {
+    return storedDesiredTrips;
   },
 
   getFormattedDate: function() {
+    var desiredTrip = desiredTrips[activeTripIndex];
     var year = desiredTrip.date.getFullYear();
     var month = desiredTrip.date.getMonth()+1;
     month = month > 9 ? month : "0" + month.toString();
@@ -67,6 +89,7 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
   },
 
   getFormattedTime: function() {
+    var desiredTrip = desiredTrips[activeTripIndex];
     var hours = desiredTrip.date.getHours();
     hours = hours > 9 ? hours : "0" + hours.toString();
     var minutes = desiredTrip.date.getMinutes();
@@ -92,18 +115,12 @@ AppDispatcher.register(function(action) {
   var from, to, date, time, timeType;
 
   switch(action.actionType) {
-    case "create":
-      from = action.from;
-      to = action.to;
-      date = action.date;
-      timeType = action.timeType.trim();
-      if (from !== null && to !== null && date !== '' && timeType !== '') {
-        create(from, fromId, to, toId, date, timeType);
-        DesiredTripStore.emitChange();
-      }
+    case "DESIRED_TRIP_CREATE":
+      create();
+      DesiredTripStore.emitChange();
       break;
 
-    case "setFrom":
+    case "DESIRED_TRIP_SETFROM":
       from = action.from;
       if(from.id !== null && from.name !== null) {
         setFrom(from);
@@ -111,7 +128,7 @@ AppDispatcher.register(function(action) {
       }
       break;
 
-    case "setTo":
+    case "DESIRED_TRIP_SETTO":
       to = action.to;
       if(to.id !== null && to.name !== null) {
         setTo(to);
@@ -119,7 +136,7 @@ AppDispatcher.register(function(action) {
       }
       break;
 
-    case "setDate":
+    case "DESIRED_TRIP_SETDATE":
       date = action.date;
       if(date !== null) {
         setDate(date);
@@ -127,7 +144,7 @@ AppDispatcher.register(function(action) {
       }
       break;
 
-    case "setTimeType":
+    case "DESIRED_TRIP_SETTIMETYPE":
       timeType = action.timeType.trim();
       if(timeType !== null) {
         setTimeType(timeType);
@@ -135,7 +152,7 @@ AppDispatcher.register(function(action) {
       }
       break;
 
-    case "destroy":
+    case "DESIRED_TRIP_DESTROY":
       from = null;
       to = null;
       date = null;
@@ -145,8 +162,24 @@ AppDispatcher.register(function(action) {
       DesiredTripStore.emitChange();
       break;
 
-    default:
+    case "DESIRED_TRIP_SETACTIVEINDEX":
+      if(action.activeIndex !== null) {
+        activeIndex = action.activeIndex;
+      }
+      break;
 
+    case "DESIRED_TRIP_LOADSTORAGE":
+      loadTrips(function() {
+        DesiredTripStore.emitChange();
+      });
+      break;
+
+    case "DESIRED_TRIP_SAVESTORAGE":
+      saveTrips();
+      break;
+
+    default:
+      console.log(action.actionType);
   }
 
 });

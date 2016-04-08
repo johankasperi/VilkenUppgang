@@ -71,6 +71,9 @@ const styles = StyleSheet.create({
   },
   searchListRowText: {
     fontSize: 18
+  },
+  datePickerWrap: {
+    flex: 1
   }
 });
 

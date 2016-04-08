@@ -129,10 +129,10 @@ class PlaceSearch extends Component {
 
   _setPlace(data) {
     if(this.state.placeType === "from") {
-      AppDispatcher.dispatch({actionType: "setFrom", from: {id: data.SiteId, name: data.Name}});
+      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETFROM", from: {id: data.SiteId, name: data.Name}});
     }
     else {
-      AppDispatcher.dispatch({actionType: "setTo", to: {id: data.SiteId, name: data.Name}});
+      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETTO", to: {id: data.SiteId, name: data.Name}});
     }
     this._closeView();
   }

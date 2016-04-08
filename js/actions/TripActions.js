@@ -4,11 +4,12 @@ var AppDispatcher = require('../dispatchers/AppDispatcher');
 const apiKey = '886e10690ad4421b96ee3f53945a84cd';
 
 var DesiredTripStore = require('../stores/DesiredTripStore');
-var trip = DesiredTripStore.get();
 
 module.exports = {
 
 	getTrips: function() {
+		var trip = DesiredTripStore.get();
+
 		if(trip.from == null || trip.to == null) {
 			return;
 		}
