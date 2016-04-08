@@ -78,21 +78,21 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
     return storedDesiredTrips;
   },
 
-  getFormattedDate: function() {
+  getFormattedDate: function(dateTime = desiredTrips[activeTripIndex].date) {
     var desiredTrip = desiredTrips[activeTripIndex];
-    var year = desiredTrip.date.getFullYear();
-    var month = desiredTrip.date.getMonth()+1;
+    var year = dateTime.getFullYear();
+    var month = dateTime.getMonth()+1;
     month = month > 9 ? month : "0" + month.toString();
-    var day = desiredTrip.date.getDate();
+    var day = dateTime.getDate();
     day = day > 9 ? day : "0" + day.toString();
     return year + '-' + month + '-' + day;
   },
 
-  getFormattedTime: function() {
+  getFormattedTime: function(dateTime = desiredTrips[activeTripIndex].date) {
     var desiredTrip = desiredTrips[activeTripIndex];
-    var hours = desiredTrip.date.getHours();
+    var hours = dateTime.getHours();
     hours = hours > 9 ? hours : "0" + hours.toString();
-    var minutes = desiredTrip.date.getMinutes();
+    var minutes = dateTime.getMinutes();
     minutes = minutes > 9 ? minutes : "0" + minutes.toString();
     return hours + ':' + minutes;
   },

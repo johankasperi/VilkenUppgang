@@ -8,8 +8,8 @@ var {
 	Navigator
 } = React;
 
+var NavigationBar = require('react-native-navbar');
 var TripStore = require('../stores/TripStore');
-
 var TripActions = require('../actions/TripActions');
 
 
@@ -18,42 +18,49 @@ class Trip extends React.Component {
 	constructor(props) {
 	  super(props);
 	  this.state = {
-	    travel: TripStore.getTrip()
+	    trip: TripStore.getTrip(props.tripIdx)
 	  };
 	  this._onChange = this._onChange.bind(this);
 	}
 
 	componentDidMount() {
-      TravelStore.addChangeListener(this._onChange);
+      TripStore.addChangeListener(this._onChange);
   	}
 
 	componentWillUnmount() {
-	  TravelStore.removeChangeListener(this._onChange);
+	  TripStore.removeChangeListener(this._onChange);
 	}
 
 	render() {
+		const titleConfig = {
+	      title: 'Din resa',
+	    };
+	    const leftButtonConfig = {
+	      title: 'Tillbaka',
+	      handler: () => this._closeView()
+	    };
+		var trip = this.state.trip.LegList.Leg;
+		console.log(trip);
 		return (
-		<Navigator
-          renderScene={this.renderScene.bind(this)}
-          navigator={this.props.navigator} />
-        )
-	}
-
-	renderScene (route, navigator) {
-		var trip = this.state.travel.LegList.Leg;
-		return (
-			<View style={styles.container}>
-				<Text>From:</Text>
-				<Text>{trip.Origin.name}</Text>
-				<Text>To:</Text>
-				<Text>{trip.Destination.name}</Text>
+			<View style={styles.nav}>
+		        <NavigationBar
+		          style={styles.navBar}
+		          title={titleConfig} 
+		          leftButton={leftButtonConfig}/>
+				<View style={styles.container}>
+					<Text>{trip[0].Origin.time}</Text>
+				</View>
 			</View>
-		)
+			)
 	}
 
 	_onChange() {
-      this.setState({travel: TravelStore.get() });
+      this.setState({trip: TripStore.getTrip(this.props.tripIdx) });
     }
+
+    _closeView() {
+    	this.props.navigator.pop();
+  	}
 }
 
 const styles = StyleSheet.create({
