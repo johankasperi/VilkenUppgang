@@ -97,6 +97,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 0.7,
     borderBottomColor: '#CCCCCC'
+  },
+  listContainer: {
+    flex: 1,
   }
 });
 

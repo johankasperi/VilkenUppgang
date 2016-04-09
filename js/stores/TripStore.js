@@ -17,6 +17,12 @@ var appendTrips = function(trips) {
 	console.log(_trips);
 }
 
+var prependTrips = function(trips) {
+  trips = getCorrectFormat(trips);
+  trips.push.apply(trips, _trips);
+  _trips = trips;
+}
+
 var getCorrectFormat = function(trips) {
 	trips = trips.TripList.Trip;
 	for(var i=0;i<trips.length;i++) {
@@ -56,6 +62,17 @@ var TripStore = assign({}, EventEmitter.prototype, {
 	return _trips[0].LegList.Leg[0].Origin.name;
   },
 
+  getFirstArrival: function() {
+    if(_trips.length < 1) {
+      return
+    }
+    var firstTrip = _trips[0].LegList.Leg;
+    var date = firstTrip[firstTrip.length-1].Destination.date;
+    var time = firstTrip[firstTrip.length-1].Destination.time;
+    var dateTime = new Date(date + ' ' + time + ':00');
+    return dateTime;
+  },
+
   getLastDeparture: function() {
   	if(_trips.length < 1) {
   		return
@@ -92,10 +109,15 @@ AppDispatcher.register(function(payload) {
       break;
 
     case "GET_LATER_TRIPS":
-    	console.log('inne i get later!!!');
       // TODO: Fixa en check om tomt
       appendTrips(payload.data);
    	  TripStore.emitChange();
+      break;
+
+    case "GET_EARLIER_TRIPS":
+      // TODO: Fixa en check om tomt
+      prependTrips(payload.data);
+      TripStore.emitChange();
       break;
 
     default:

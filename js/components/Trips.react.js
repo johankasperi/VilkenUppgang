@@ -86,20 +86,44 @@ class Trips extends React.Component {
           style={styles.navBar}
           title={titleConfig} 
           leftButton={leftButtonConfig}/>
-  			<View>
+  			<View style={styles.listContainer}>
   			  <Text>{this.state.origin} - {this.state.destiantion}</Text>
   	      <ListView
   	        dataSource={this.state.dataSource}
-  	        renderRow={this.renderRow.bind(this)} />
+  	        renderRow={this.renderRow.bind(this)}
+            renderHeader={this._renderHeader.bind(this)}
+            renderFooter={this._renderFooter.bind(this)} />
+
+  		  </View>
+      </View>
+    )
+	}
+
+  _renderHeader() {
+    return (
+          <TouchableHighlight onPress={()=>this._getEarlierTrips()}>
+            <View>
+              <Text>Tidigare</Text>
+            </View>
+          </TouchableHighlight>
+      )
+  }
+
+  _renderFooter() {
+    return (
           <TouchableHighlight onPress={()=>this._getLaterTrips()}>
             <View>
               <Text>Senare</Text>
             </View>
           </TouchableHighlight>
-  		  </View>
-      </View>
-    )
-	}
+      )
+  }
+
+  _getEarlierTrips () {
+    var date = new Date(TripStore.getFirstArrival().getTime() - 60000);
+    console.log(date);
+    TripActions.getTrips(date, true);
+  }
 
   _getLaterTrips () {
     var date = new Date(TripStore.getLastDeparture().getTime() + 60000);
