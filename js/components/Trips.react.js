@@ -5,12 +5,14 @@ var {
 	View,
 	Text,
 	ListView,
-	TouchableHighlight
+	TouchableHighlight,
+  Navigator
 } = React;
 
 var NavigationBar = require('react-native-navbar');
 var TripActions = require('../actions/TripActions');
 var TripStore = require('../stores/TripStore');
+var Trip = require('./Trip.react');
 var styles = require('../styles/MainStyle');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var i = 0;
@@ -22,8 +24,8 @@ class Trips extends React.Component {
 		super(props);
     	this.state = {
       		dataSource: ds.cloneWithRows(TripStore.getAll()),
-      		origin:"",
-      		destiantion:""
+      		origin:TripStore.getOrigin(),
+      		destiantion:TripStore.getDestination()
     	};
 
 		this._onChange = this._onChange.bind(this)
@@ -39,28 +41,33 @@ class Trips extends React.Component {
 	}
 
 	renderRow(rowData, sectionID, rowID) {
-		var trip = [];
-		if(!Array.isArray(rowData.LegList.Leg)) {
-			trip.push(rowData.LegList.Leg)
-		}
-		else {
-			trip = rowData.LegList.Leg;
-		}
+		var trip = rowData.LegList.Leg;
+    var lastIdx = trip.length-1;
+    console.log(rowID);
 	    return (
-	      <TouchableHighlight
-	          underlayColor='#dddddd'>
-	        <View>
+        <TouchableHighlight onPress={()=>this._goToTrip(rowID)}>
+        <View style={styles.tripsRow}>
+	        <View style={styles.tripsColumn}>
+            <Text>{trip[0].Origin.time}</Text>
 	          <Text>{this.tripChanges(trip)}</Text>
-	          <Text>{rowData.dur} min</Text>
-	        </View>
-	      </TouchableHighlight>
+          </View>
+          <View style={styles.tripsColumnMid}><Text>-></Text></View>
+          <View style={styles.tripsColumnRight}>
+            <Text>{trip[lastIdx].Destination.time}</Text>
+	          <Text>Restid: {rowData.dur} min</Text>
+          </View>
+        </View>
+        </TouchableHighlight>
 	    );
   	}
 
   	tripChanges(trip) {
   		var changes = "";
   		for(var i=0; i<trip.length;i++) {
-  			changes = changes + trip[i].type + " - ";
+  			changes = changes + trip[i].type;
+        if(i+1 < trip.length) {
+          changes = changes + " -> ";
+        }
   		}
   		return changes;
   	}
@@ -79,15 +86,58 @@ class Trips extends React.Component {
           style={styles.navBar}
           title={titleConfig} 
           leftButton={leftButtonConfig}/>
-  			<View style={styles.container}>
+  			<View style={styles.listContainer}>
   			  <Text>{this.state.origin} - {this.state.destiantion}</Text>
-  	      <ListView style={styles.list}
+  	      <ListView
   	        dataSource={this.state.dataSource}
-  	        renderRow={this.renderRow.bind(this)} />
+  	        renderRow={this.renderRow.bind(this)}
+            renderHeader={this._renderHeader.bind(this)}
+            renderFooter={this._renderFooter.bind(this)} />
+
   		  </View>
       </View>
     )
 	}
+
+  _renderHeader() {
+    return (
+          <TouchableHighlight onPress={()=>this._getEarlierTrips()}>
+            <View>
+              <Text>Tidigare</Text>
+            </View>
+          </TouchableHighlight>
+      )
+  }
+
+  _renderFooter() {
+    return (
+          <TouchableHighlight onPress={()=>this._getLaterTrips()}>
+            <View>
+              <Text>Senare</Text>
+            </View>
+          </TouchableHighlight>
+      )
+  }
+
+  _getEarlierTrips () {
+    var date = new Date(TripStore.getFirstArrival().getTime() - 60000);
+    console.log(date);
+    TripActions.getTrips(TripStore.getFirstArrival(), true);
+  }
+
+  _getLaterTrips () {
+    var date = new Date(TripStore.getLastDeparture().getTime() + 60000);
+    console.log(date);
+    TripActions.getTrips(TripStore.getLastDeparture());
+  }
+
+  _goToTrip(idx) {
+    this.props.navigator.push({
+      sceneConfig: Navigator.SceneConfigs.FloatFromRight,
+      component: Trip,
+      passProps: { tripIdx: idx }
+    });
+  }
 
   _closeView() {
     this.props.navigator.pop();

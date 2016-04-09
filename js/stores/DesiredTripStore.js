@@ -91,7 +91,7 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
     var year = desiredTrip.date.getFullYear();
     var month = desiredTrip.date.getMonth()+1;
     month = month > 9 ? month : "0" + month.toString();
-    var day = desiredTrip.date.getDate();
+    var day = dateTime.getDate();
     day = day > 9 ? day : "0" + day.toString();
     return year + '-' + month + '-' + day;
   },
@@ -99,7 +99,7 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
   getFormattedTime: function() {
     var hours = desiredTrip.date.getHours();
     hours = hours > 9 ? hours : "0" + hours.toString();
-    var minutes = desiredTrip.date.getMinutes();
+    var minutes = dateTime.getMinutes();
     minutes = minutes > 9 ? minutes : "0" + minutes.toString();
     return hours + ':' + minutes;
   },

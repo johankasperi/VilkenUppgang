@@ -74,6 +74,32 @@ const styles = StyleSheet.create({
   },
   datePickerWrap: {
     flex: 1
+  },
+  tripsColumn: {
+    flex: 1,
+    flexDirection: 'column',
+
+  },
+  tripsColumnMid: {
+    padding: 10,
+  },
+  tripsColumnRight: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'flex-end'
+  },
+  tripsRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 10,
+    borderBottomWidth: 0.7,
+    borderBottomColor: '#CCCCCC'
+  },
+  listContainer: {
+    flex: 1,
   }
 });
 

@@ -171,7 +171,7 @@ class Search extends Component {
     }
     AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SAVESTORAGE" });
     this.props.navigator.push({
-      sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
+      sceneConfig: Navigator.SceneConfigs.FloatFromRight,
       component: Trips
     });
   }

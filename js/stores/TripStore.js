@@ -9,7 +9,35 @@ var CHANGE_EVENT = 'change';
 var _trips = [];
 
 var setTrips = function(trips) {
-	_trips = trips.TripList.Trip;
+	_trips = getCorrectFormat(trips);
+}
+
+var appendTrips = function(trips) {
+  trips = getCorrectFormat(trips);
+  trips.shift();
+	_trips.push.apply(_trips, trips);
+}
+
+var prependTrips = function(trips) {
+  trips = getCorrectFormat(trips);
+  trips.pop();
+  trips.push.apply(trips, _trips);
+  _trips = trips;
+}
+
+var getCorrectFormat = function(trips) {
+	trips = trips.TripList.Trip;
+	for(var i=0;i<trips.length;i++) {
+		var trip = [];
+		if(!Array.isArray(trips[i].LegList.Leg)) {
+			trip.push(trips[i].LegList.Leg)
+		}
+		else {
+			trip = trips[i].LegList.Leg;
+		}
+		trips[i].LegList.Leg = trip;
+	}
+	return trips;
 }
 
 var TripStore = assign({}, EventEmitter.prototype, {
@@ -26,31 +54,36 @@ var TripStore = assign({}, EventEmitter.prototype, {
   	if(_trips.length < 1) {
   		return
   	}
-	var trip = _trips[0];
-	var destination;
-	if(!Array.isArray(trip.LegList.Leg)) {
-		destination = trip.LegList.Leg.Destination.name;
-	}
-	else {
-		console.log(trip);
-		destination = trip.LegList.Leg[trip.LegList.Leg.length-1].Destination.name;
-	}
-	return destination;
+	return _trips[0].LegList.Leg[_trips[0].LegList.Leg.length-1].Destination.name;
   },
 
   getOrigin: function() {
   	if(_trips.length < 1) {
   		return
   	}
-  	var trip = _trips[0];
-  	var origin;
-  	if(!Array.isArray(trip.LegList.Leg)) {
-		origin = trip.LegList.Leg.Origin.name;
-	}
-	else {
-		origin = trip.LegList.Leg[0].Origin.name;
-	}
-	return origin;
+	return _trips[0].LegList.Leg[0].Origin.name;
+  },
+
+  getFirstArrival: function() {
+    if(_trips.length < 1) {
+      return
+    }
+    var firstTrip = _trips[0].LegList.Leg;
+    var date = firstTrip[firstTrip.length-1].Destination.date;
+    var time = firstTrip[firstTrip.length-1].Destination.time;
+    var dateTime = new Date(date + ' ' + time + ':00');
+    return dateTime;
+  },
+
+  getLastDeparture: function() {
+  	if(_trips.length < 1) {
+  		return
+  	}
+  	var lastTrip = _trips[_trips.length-1].LegList.Leg;
+  	var date = lastTrip[0].Origin.date;
+  	var time = lastTrip[0].Origin.time;
+  	var dateTime = new Date(date + ' ' + time + ':00');
+  	return dateTime;
   },
 
   emitChange: function() {
@@ -75,6 +108,18 @@ AppDispatcher.register(function(payload) {
       // TODO: Fixa en check om tomt
       setTrips(payload.data);
    	  TripStore.emitChange();
+      break;
+
+    case "GET_LATER_TRIPS":
+      // TODO: Fixa en check om tomt
+      appendTrips(payload.data);
+   	  TripStore.emitChange();
+      break;
+
+    case "GET_EARLIER_TRIPS":
+      // TODO: Fixa en check om tomt
+      prependTrips(payload.data);
+      TripStore.emitChange();
       break;
 
     default:
