@@ -122,13 +122,13 @@ class Trips extends React.Component {
   _getEarlierTrips () {
     var date = new Date(TripStore.getFirstArrival().getTime() - 60000);
     console.log(date);
-    TripActions.getTrips(date, true);
+    TripActions.getTrips(TripStore.getFirstArrival(), true);
   }
 
   _getLaterTrips () {
     var date = new Date(TripStore.getLastDeparture().getTime() + 60000);
     console.log(date);
-    TripActions.getTrips(date);
+    TripActions.getTrips(TripStore.getLastDeparture());
   }
 
   _goToTrip(idx) {

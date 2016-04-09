@@ -10,9 +10,10 @@ module.exports = {
 	getTrips: function(dateTime, getEarlierTrips = false) {
 		var actionType = "GET_TRIPS";
 		var searchForArrival = 0;
-		console.log(dateTime);
+		var numTrips = 6;
 		var trip = DesiredTripStore.get(); 
 		if(!dateTime) {
+			numTrips = 5;
 			dateTime = trip.date;
 			if(trip.timeType == 'departure') {
 				searchForArrival = 0;
@@ -37,7 +38,7 @@ module.exports = {
 
 
 		var query = "http://api.sl.se/api2/TravelplannerV2/trip.json?key=" + apiKey;
-		query = query + "&originId=" + trip.from.id + "&destId=" + trip.to.id + "&searchForArrival=" + searchForArrival;
+		query = query + "&originId=" + trip.from.id + "&destId=" + trip.to.id + "&searchForArrival=" + searchForArrival + "&numTrips=" + numTrips;
 
 		if(dateTime != null) {
 			query = query + "&date=" + DesiredTripStore.getFormattedDate(dateTime) + "&time=" + DesiredTripStore.getFormattedTime(dateTime);

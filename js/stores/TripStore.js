@@ -13,12 +13,14 @@ var setTrips = function(trips) {
 }
 
 var appendTrips = function(trips) {
-	_trips.push.apply(_trips, getCorrectFormat(trips));
-	console.log(_trips);
+  trips = getCorrectFormat(trips);
+  trips.shift();
+	_trips.push.apply(_trips, trips);
 }
 
 var prependTrips = function(trips) {
   trips = getCorrectFormat(trips);
+  trips.pop();
   trips.push.apply(trips, _trips);
   _trips = trips;
 }
