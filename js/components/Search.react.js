@@ -33,7 +33,6 @@ function getPlaceItems(place) {
 class Search extends Component {
   constructor(props) {
     super(props);
-    AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_CREATE"});
 
     this.state = {
       from: "Från",

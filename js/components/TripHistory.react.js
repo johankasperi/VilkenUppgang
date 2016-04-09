@@ -57,7 +57,7 @@ class TripHistory extends Component {
   }
 
   _setActive(id) {
-    AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SETACTIVEINDEX", activeIndex: id });
+    AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SETFROMSTORAGE", id: id });
   }
 
   _onChange() {
