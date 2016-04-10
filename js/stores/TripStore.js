@@ -9,6 +9,7 @@ var CHANGE_EVENT = 'change';
 var _trips = [];
 
 var setTrips = function(trips) {
+  console.log(trips);
 	_trips = getCorrectFormat(trips);
 }
 
