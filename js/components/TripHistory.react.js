@@ -15,7 +15,6 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 class TripHistory extends Component {
   constructor(props) {
     super(props);
-    AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_LOADSTORAGE"});
 
     this.state = {
       tripHistoryList: ds.cloneWithRows(DesiredTripStore.getAllStored()),

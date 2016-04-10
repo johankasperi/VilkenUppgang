@@ -72,7 +72,7 @@ function loadTrips(callback) {
 }
 
 function saveTrips() {
-  desiredTrip.id = storedTrips.length - 1;
+  desiredTrip.id = storedTrips.length;
   storedTrips.push(desiredTrip);
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
@@ -91,7 +91,7 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
     var year = desiredTrip.date.getFullYear();
     var month = desiredTrip.date.getMonth()+1;
     month = month > 9 ? month : "0" + month.toString();
-    var day = dateTime.getDate();
+    var day = desiredTrip.date.getDate();
     day = day > 9 ? day : "0" + day.toString();
     return year + '-' + month + '-' + day;
   },
@@ -99,7 +99,7 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
   getFormattedTime: function() {
     var hours = desiredTrip.date.getHours();
     hours = hours > 9 ? hours : "0" + hours.toString();
-    var minutes = dateTime.getMinutes();
+    var minutes = desiredTrip.date.getMinutes();
     minutes = minutes > 9 ? minutes : "0" + minutes.toString();
     return hours + ':' + minutes;
   },
