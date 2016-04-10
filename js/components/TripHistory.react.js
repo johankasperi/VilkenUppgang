@@ -3,9 +3,10 @@ import React, {
   Text,
   ListView,
   View,
-  TouchableOpacity
+  TouchableHighlight,
 } from 'react-native';
 
+const Icon = require('react-native-vector-icons/MaterialIcons');
 const AppDispatcher = require('../dispatchers/AppDispatcher');
 const styles = require('../styles/MainStyle');
 const DesiredTripStore = require('../stores/DesiredTripStore');
@@ -34,13 +35,12 @@ class TripHistory extends Component {
   render() {
       if(this.state.showHistory) {
         return (
-          <View>
-          <Text>Tidigare resor</Text>
-          <ListView
-            style={styles.list}
-            dataSource={this.state.tripHistoryList}
-            renderRow={(rowData) => this._renderRow(rowData)}
-          />
+          <View style={{paddingTop: 20}}>
+            <Text style={styles.fontBold}>Tidigare resor</Text>
+            <ListView
+              dataSource={this.state.tripHistoryList}
+              renderRow={(rowData) => this._renderRow(rowData)}
+            />
           </View>
         );
       }
@@ -52,14 +52,18 @@ class TripHistory extends Component {
 
   _renderRow(rowData) {
     return (
-      <View
-        style={styles.list}>
-        <TouchableOpacity 
-          onPress={()=>this._setActive(rowData.id)}>
-          <Text>{rowData.from.name + " > " + rowData.to.name}</Text>
-        </TouchableOpacity>
-      </View>
-    )
+      <TouchableHighlight onPress={()=>this._setActive(rowData.id)} underlayColor="#FFFFFF">
+        <View style={styles.tripsRow}>
+          <View style={[styles.tripsColumn, styles.changesRow]}>
+            <Text style={styles.searchHistoryText}>{rowData.from.name}</Text>
+          </View>
+          <View style={[styles.tripsColumnMid, styles.changesRow]}><Icon name="trending-flat" size={30} color="#CCCCCC"></Icon></View>
+          <View style={[styles.tripsColumnRight, styles.changesRow]}>
+            <Text style={styles.searchHistoryText}>{rowData.to.name}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
   }
 
   _setActive(id) {

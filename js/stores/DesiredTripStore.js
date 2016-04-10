@@ -56,8 +56,7 @@ function destroy() {
 }
 
 function setFromStorage(id) {
-  if(id <= storedTrips.length) {
-    console.log("SETTT");
+  if(id < storedTrips.length) {
     setFrom(storedTrips[id].from);
     setTo(storedTrips[id].to);
   }
@@ -173,7 +172,6 @@ AppDispatcher.register(function(action) {
     case "DESIRED_TRIP_SETFROMSTORAGE":
       id = action.id;
       if(id !== null) {
-        console.log("setFromStorage");
         setFromStorage(id);
         DesiredTripStore.emitChange();
       }

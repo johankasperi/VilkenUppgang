@@ -72,7 +72,7 @@ class Search extends Component {
           <NavigationBar
             style={styles.navBar}
             title={titleConfig} />
-          <ScrollView contentContainerStyle={styles.container}>
+          <View style={styles.container}>
             <TouchableOpacity
               style={styles.searchInput}
               onPress={this._searchFrom.bind(this)}
@@ -105,7 +105,7 @@ class Search extends Component {
               <Text style={styles.buttonText}>Sök</Text>
             </TouchableHighlight>
             <TripHistory />
-          </ScrollView>
+          </View>
         </View>
         <DateTimePicker cancelText="Cancel" okText="Done" ref={(picker)=>{this.picker = picker}} />
       </View>

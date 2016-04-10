@@ -19,9 +19,8 @@ const styles = StyleSheet.create({
     color: '#656565'
   },
   container: {
+    flex: 1,
     padding: 10,
-    marginTop: 65,
-    alignItems: 'center'
   },
   flowRight: {
     flexDirection: 'row',
@@ -37,14 +36,17 @@ const styles = StyleSheet.create({
     height: 36,
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#AAAAAA',
+    backgroundColor: '#CCCCCC',
     marginBottom: 10,
     padding: 3,
     alignSelf: 'stretch',
     justifyContent: 'center'
   },
+  fontBold: {
+    fontWeight: 'bold',
+  },
   buttonActive: {
-    backgroundColor: '#48BBEC',
+    backgroundColor: '#4F8EF7',
   },
   searchInput: {
     alignSelf: 'stretch',
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   searchInputActive: {
-    color: '#48BBEC'
+    color: '#4F8EF7'
   },
   list: {
     alignSelf: 'stretch',
@@ -73,13 +75,15 @@ const styles = StyleSheet.create({
   searchListRowText: {
     fontSize: 18
   },
+  searchHistoryText: {
+    flexWrap: 'wrap'
+  },
   datePickerWrap: {
     flex: 1
   },
   tripsColumn: {
     flex: 1,
     flexDirection: 'column',
-
   },
   tripsColumnMid: {
     padding: 10,
