@@ -37,8 +37,8 @@ class PlaceSearch extends Component {
 
   render() {
       return (
-          <View>
-          <Text>Dina favoriter</Text>
+          <View style={{paddingTop: 20}}>
+          <Text style={styles.fontBold}>Dina favoriter</Text>
           <ListView
             dataSource={this.state.favoritesList}
             renderRow={(rowData) => this._renderRow(rowData)}

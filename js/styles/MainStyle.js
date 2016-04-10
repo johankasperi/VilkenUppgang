@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     color: '#656565'
   },
   container: {
-    flex: 1,
     padding: 10,
   },
   wrap: {
