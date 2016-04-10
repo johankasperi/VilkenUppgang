@@ -56,7 +56,8 @@ function destroy() {
 }
 
 function setFromStorage(id) {
-  if(id < storedTrips.length) {
+  if(id <= storedTrips.length) {
+    console.log("SETTT");
     setFrom(storedTrips[id].from);
     setTo(storedTrips[id].to);
   }
@@ -72,8 +73,9 @@ function loadTrips(callback) {
 }
 
 function saveTrips() {
-  desiredTrip.id = storedTrips.length;
-  storedTrips.push(desiredTrip);
+  var newTrip = JSON.parse(JSON.stringify(desiredTrip));
+  newTrip.id = storedTrips.length;
+  storedTrips.push(newTrip);
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
 
@@ -168,6 +170,7 @@ AppDispatcher.register(function(action) {
     case "DESIRED_TRIP_SETFROMSTORAGE":
       id = action.id;
       if(id !== null) {
+        console.log("setFromStorage");
         setFromStorage(id);
         DesiredTripStore.emitChange();
       }
@@ -181,6 +184,7 @@ AppDispatcher.register(function(action) {
 
     case "DESIRED_TRIP_SAVESTORAGE":
       saveTrips();
+      DesiredTripStore.emitChange();
       break;
 
     default:
