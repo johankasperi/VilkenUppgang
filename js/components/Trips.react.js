@@ -158,7 +158,7 @@ class Trips extends React.Component {
       <View style={styles.nav}>
         <NavigationBar
           title={titleConfig} 
-          leftButton={leftButtonConfig}/>
+          leftButton={this._renderLeftButton()}/>
   			<View style={styles.listContainer}>
   			  <View style={styles.header}>
             <Text style={styles.headerTitle}>{this.state.origin} </Text>
@@ -249,6 +249,16 @@ class Trips extends React.Component {
 	}
   _onChangeDesiered() {
     this.setState({date: DesiredTripStore.getFormattedDate(), time: DesiredTripStore.getFormattedTime() });
+  }
+
+  _renderLeftButton () {
+        return (
+          <View style={styles.leftNavButton}>
+          <TouchableHighlight onPress={()=>this._closeView()} underlayColor="#FFFFFF">
+              <Icon name="keyboard-arrow-left" size={30} color="#4F8EF7" />
+          </TouchableHighlight>
+          </View>
+      )
   }
 
 }

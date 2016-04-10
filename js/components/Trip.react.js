@@ -5,7 +5,8 @@ var {
 	View,
 	Text,
 	StyleSheet,
-	Navigator
+	Navigator,
+	TouchableHighlight
 } = React;
 
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -57,7 +58,7 @@ class Trip extends React.Component {
 			<View style={styles.nav}>
 		        <NavigationBar
 		          title={titleConfig} 
-		          leftButton={leftButtonConfig}/>
+		          leftButton={this._renderLeftButton()}/>
 		        <View style={styles.header}>
         		  <Text style={styles.headerTitle}>{trip[0].Origin.name} </Text>
         		  <View><Icon name="trending-flat" size={25} color="#FFFFFF" /></View>
@@ -140,6 +141,16 @@ class Trip extends React.Component {
     _closeView() {
     	this.props.navigator.pop();
   	}
+
+  	 _renderLeftButton () {
+        return (
+          <View style={styles.leftNavButton}>
+          <TouchableHighlight onPress={()=>this._closeView()} underlayColor="#FFFFFF">
+              <Icon name="keyboard-arrow-left" size={30} color="#4F8EF7" />
+          </TouchableHighlight>
+          </View>
+      )
+  }
 }
 
 module.exports = Trip;

@@ -72,7 +72,7 @@ class PlaceSearch extends Component {
         <NavigationBar
           style={styles.navBar}
           title={titleConfig}
-          leftButton={leftButtonConfig}/>
+          leftButton={this._renderLeftButton()}/>
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.searchInput}>
             <TextInput
@@ -155,6 +155,16 @@ class PlaceSearch extends Component {
 
   _closeView() {
     this.props.navigator.pop();
+  }
+
+  _renderLeftButton () {
+    return (
+      <View style={styles.leftNavButton}>
+      <TouchableHighlight onPress={()=>this._closeView()} underlayColor="#FFFFFF">
+          <Icon name="keyboard-arrow-left" size={30} color="#4F8EF7" />
+      </TouchableHighlight>
+      </View>
+    )
   }
 
 };

@@ -59,7 +59,7 @@ class PlaceSearch extends Component {
           onPress={()=>this._removeFavorite(rowData)}>
           <Icon name="star" size={25} color="#FFAE00" />
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={()=>this._setPlace(rowData)}>
           <Text style={styles.searchListRowText} >{rowData.name}</Text>
         </TouchableOpacity>
