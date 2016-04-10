@@ -7,6 +7,7 @@ import React, {
   Modal,
   ListView,
   View,
+  ScrollView,
   TouchableOpacity
 } from 'react-native';
 
@@ -68,9 +69,9 @@ class PlaceSearch extends Component {
 
         <NavigationBar
           style={styles.navBar}
-          title={titleConfig} 
+          title={titleConfig}
           leftButton={leftButtonConfig}/>
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.searchInput}>
             <TextInput
               style={[styles.searchInput, styles.searchInputText]}
@@ -84,7 +85,7 @@ class PlaceSearch extends Component {
             renderRow={(rowData) => this._renderRow(rowData)}
           />
           <Favorites placeType={this.state.placeType} navigator={this.props.navigator} />
-        </View>
+        </ScrollView>
       </View>
     );
   }

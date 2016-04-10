@@ -8,6 +8,7 @@ import React, {
   TouchableOpacity,
   ListView,
   Alert,
+  ScrollView,
   View
 } from 'react-native';
 import DateTimePicker from 'react-native-datetime';
@@ -71,7 +72,7 @@ class Search extends Component {
           <NavigationBar
             style={styles.navBar}
             title={titleConfig} />
-          <View style={styles.container}>
+          <ScrollView contentContainerStyle={styles.container}>
             <TouchableOpacity
               style={styles.searchInput}
               onPress={this._searchFrom.bind(this)}
@@ -104,7 +105,7 @@ class Search extends Component {
               <Text style={styles.buttonText}>Sök</Text>
             </TouchableHighlight>
             <TripHistory />
-          </View>
+          </ScrollView>
         </View>
         <DateTimePicker cancelText="Cancel" okText="Done" ref={(picker)=>{this.picker = picker}} />
       </View>

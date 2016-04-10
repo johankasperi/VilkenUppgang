@@ -76,6 +76,9 @@ function saveTrips() {
   var newTrip = JSON.parse(JSON.stringify(desiredTrip));
   newTrip.id = storedTrips.length;
   storedTrips.push(newTrip);
+  if(storedTrips.length > 10) {
+    storedTrips.splice(1, storedTrips.length - 1);
+  }
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
 
