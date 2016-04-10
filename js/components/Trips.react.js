@@ -9,6 +9,8 @@ var {
   Navigator
 } = React;
 
+
+const AppDispatcher = require('../dispatchers/AppDispatcher');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var NavigationBar = require('react-native-navbar');
 var DesiredTripStore = require('../stores/DesiredTripStore');
@@ -39,19 +41,25 @@ class Trips extends React.Component {
     	this.state = {
       		dataSource: ds.cloneWithRows(TripStore.getAll()),
       		origin:TripStore.getOrigin(),
-      		destiantion:TripStore.getDestination()
+      		destiantion:TripStore.getDestination(),
+          date: DesiredTripStore.getFormattedDate(),
+          time: DesiredTripStore.getFormattedTime()
     	};
 
-		this._onChange = this._onChange.bind(this)
+		this._onChange = this._onChange.bind(this);
+    this._onChangeDesiered = this._onChangeDesiered.bind(this)
+
 
 	}
 
 	componentDidMount() {
       TripStore.addChangeListener(this._onChange);
+      DesiredTripStore.addChangeListener(this._onChangeDesiered);
   	}
 
 	componentWillUnmount() {
 	  TripStore.removeChangeListener(this._onChange);
+    DesiredTripStore.removeChangeListener(this._onChangeDesiered);
 	}
 
 	renderRow(rowData, sectionID, rowID) {
@@ -78,7 +86,6 @@ class Trips extends React.Component {
 
   		var changes = [];
       var type = "";
-      var shortType = "";
   		for(var i=0; i<trip.length;i++) {
         var hide = false;
         if("hide" in trip[i]) {
@@ -87,6 +94,7 @@ class Trips extends React.Component {
           }
         }
         if(!hide) {
+            var shortType = "";
             var color = "#CCCCCC";
             if(trip[i].type === "METRO") {
               color = lineColors[parseInt(trip[i].line)];
@@ -111,9 +119,19 @@ class Trips extends React.Component {
             }
             else if(trip[i].type === "WALK") {
               type = "directions-walk";
+              shortType = trip[i].dist + "m";
             }
-      			changes.push(<View style={styles.changesColumn}><Icon name={type} size={20} color={color} /><Text style={styles.lineNumber}>{shortType}{trip[i].line}</Text></View>);
-            if(i < trip.length-2) {
+            else if(trip[i].type === "TRAIN") {
+              type = "train";
+              shortType = "P";
+            }
+      			changes.push(
+              <View style={styles.changesColumn}>
+                <Icon name={type} size={20} color={color} />
+                <Text style={styles.lineNumber}>{shortType}{trip[i].line}</Text>
+              </View>
+            );
+            if(i < trip.length-1) {
               changes.push(<Icon name="keyboard-arrow-right" size={20} color="#CCCCCC"/>);
             }
   		  }
@@ -129,6 +147,13 @@ class Trips extends React.Component {
       title: 'Tillbaka',
       handler: () => this._closeView()
     };
+    var timeType;
+    if(DesiredTripStore.get().timeType === "departure") {
+      timeType = "Avgår";
+    }
+    else {
+      timeType = "Framme";
+    }
 		return(
       <View style={styles.nav}>
         <NavigationBar
@@ -148,13 +173,19 @@ class Trips extends React.Component {
   		  </View>
         <View style={styles.footer}>
           <View style={styles.footerLeft}>
-            <Icon name="today" size={30} color="#4F8EF7" />
-            <Text style={styles.footerText}>{DesiredTripStore.getFormattedDate()}</Text>
+            <Icon name="today" size={25} color="#4F8EF7" />
+            <Text style={styles.footerText}>{this.state.date}</Text>
           </View>
+          <View style={styles.footerMid}>
+            <Icon name="access-time" size={25} color="#4F8EF7" />
+            <Text style={styles.footerText}>{timeType} {this.state.time}</Text>
+          </View>
+          <TouchableHighlight style={styles.footerRight} underlayColor="#FFFFFF" onPress={()=>this._reverseDirection()}>
           <View style={styles.footerRight}>
-            <Icon name="access-time" size={30} color="#4F8EF7" />
-            <Text style={styles.footerText}>{DesiredTripStore.getFormattedTime()}</Text>
+            <Icon style={styles.reverseDir} name="compare-arrows" size={25} color="#4F8EF7" />
+            <Text style={styles.footerText}>Byt riktning</Text>
           </View>
+          </TouchableHighlight>
         </View>
       </View>
     )
@@ -192,6 +223,14 @@ class Trips extends React.Component {
     TripActions.getTrips(TripStore.getLastDeparture());
   }
 
+  _reverseDirection() {
+    var to = DesiredTripStore.get().from;
+    var from = DesiredTripStore.get().to;
+    AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETFROM", from: {id: from.id, name: from.name}});
+    AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETTO", to: {id: to.id, name: to.name}});
+    TripActions.getTrips();
+  }
+
   _goToTrip(idx) {
     this.props.navigator.push({
       sceneConfig: Navigator.SceneConfigs.FloatFromRight,
@@ -208,6 +247,9 @@ class Trips extends React.Component {
       this.setState({dataSource: ds.cloneWithRows(TripStore.getAll()), origin: TripStore.getOrigin(), destiantion: TripStore.getDestination() });
       console.log(this.state.dataSource);
 	}
+  _onChangeDesiered() {
+    this.setState({date: DesiredTripStore.getFormattedDate(), time: DesiredTripStore.getFormattedTime() });
+  }
 
 }
 

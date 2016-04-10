@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   },
   nav: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
   },
   description: {
     marginBottom: 20,
@@ -121,6 +122,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
+  footerMid: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
   footerLeft: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -161,7 +167,57 @@ const styles = StyleSheet.create({
   },
   timeDur: {
     fontWeight: 'bold',
-  }
+  },
+  reverseDir: {
+    transform: [{rotate: '90deg'}],
+  },
+  timeline: {
+    marginTop: 20,
+    borderLeftColor: "#000000",
+    borderLeftWidth: 1,
+  },
+  changesContainer: {
+    padding: 10,
+  },
+  journeyDetails: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingLeft: 10,
+  },
+  originTitle: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    paddingTop: 5,
+  },
+  firstOriginTitle: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginTop: -10,
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+    destinationTitle: {
+      paddingBottom: 5,
+  },
+  lastDestinationTitle: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginBottom: -13,
+  },
+  changeContainer: {
+    paddingLeft: 10,
+  },
+  bulletPoint: {
+    color: '#4F8EF7',
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginLeft: -17,
+    marginTop: -15,
+    marginBottom: -15,
+    fontSize: 30,
+  },
+    rowContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
 });
 
 module.exports = styles;
