@@ -16,8 +16,8 @@ class TripHistory extends Component {
   constructor(props) {
     super(props);
     AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_LOADSTORAGE"});
-
     this.state = {
+      showHistory: DesiredTripStore.getAllStored().length > 0,
       tripHistoryList: ds.cloneWithRows(DesiredTripStore.getAllStored()),
     };
     this._onChange = this._onChange.bind(this)
@@ -32,7 +32,8 @@ class TripHistory extends Component {
   }
 
   render() {
-      return (
+      if(this.state.showHistory) {
+        return (
           <View>
           <Text>Tidigare resor</Text>
           <ListView
@@ -41,7 +42,12 @@ class TripHistory extends Component {
             renderRow={(rowData) => this._renderRow(rowData)}
           />
           </View>
-    );
+        );
+      }
+      else {
+        return (<View></View>);
+      }
+
   }
 
   _renderRow(rowData) {
@@ -57,11 +63,14 @@ class TripHistory extends Component {
   }
 
   _setActive(id) {
-    AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SETACTIVEINDEX", activeIndex: id });
+    console.log("setactive");
+    AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SETFROMSTORAGE", id: id });
   }
 
   _onChange() {
+    console.log("history on change");
     this.setState({ tripHistoryList: ds.cloneWithRows(DesiredTripStore.getAllStored()) });
+    this.setState({ showHistory: DesiredTripStore.getAllStored().length > 0 });
   }
 
 };

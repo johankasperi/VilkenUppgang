@@ -74,7 +74,7 @@ class PlaceSearch extends Component {
           <View style={styles.searchInput}>
             <TextInput
               style={[styles.searchInput, styles.searchInputText]}
-              onChange={this._setSearchString.bind(this)}
+              onChange={(event) => this._setSearchString(event)}
               value={this.state.searchString}
               placeholder='Sök'/>
           </View>
