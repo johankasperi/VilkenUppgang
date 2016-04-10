@@ -10,6 +10,7 @@ import React, {
   TouchableOpacity
 } from 'react-native';
 
+var Icon = require('react-native-vector-icons/MaterialIcons');
 const AppDispatcher = require('../dispatchers/AppDispatcher');
 const styles = require('../styles/MainStyle');
 const PlacesStore = require('../stores/PlacesStore');
@@ -39,7 +40,6 @@ class PlaceSearch extends Component {
           <View>
           <Text>Dina favoriter</Text>
           <ListView
-            style={styles.list}
             dataSource={this.state.favoritesList}
             renderRow={(rowData) => this._renderRow(rowData)}
           />
@@ -56,9 +56,8 @@ class PlaceSearch extends Component {
       <View 
         style={styles.list}>
         <TouchableOpacity 
-          style={[styles.button]}
           onPress={()=>this._removeFavorite(rowData)}>
-          <Text style={styles.buttonText}>Favorite</Text>
+          <Icon name="star" size={25} color="#FFAE00" />
         </TouchableOpacity>
         <TouchableOpacity 
           onPress={()=>this._setPlace(rowData)}>

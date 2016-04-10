@@ -11,6 +11,8 @@ import React, {
   TouchableOpacity
 } from 'react-native';
 
+
+var Icon = require('react-native-vector-icons/MaterialIcons');
 const NavigationBar = require('react-native-navbar');
 const AppDispatcher = require('../dispatchers/AppDispatcher');
 const styles = require('../styles/MainStyle');
@@ -80,7 +82,6 @@ class PlaceSearch extends Component {
               placeholder='Sök'/>
           </View>
           <ListView
-            style={styles.list}
             dataSource={this.state.placeList}
             renderRow={(rowData) => this._renderRow(rowData)}
           />
@@ -111,15 +112,19 @@ class PlaceSearch extends Component {
         isFavorite = true;
       }
     }
+    var starType = "star-border";
+    if(isFavorite) {
+      starType = "star";
+    }
     return (
       <View 
-        style={styles.list}>
-        <TouchableOpacity 
-          style={[styles.button, !isFavorite && styles.buttonActive]}
+        style={[styles.list, styles.center]}>
+        <TouchableOpacity
           onPress={()=>this._addFavorite(rowData, isFavorite)}>
-          <Text style={styles.buttonText}>Favorite</Text>
+          <Icon name={starType} size={25} color="#FFAE00" />
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
+          style={[styles.changesRow]}
           onPress={()=>this._setPlace(rowData)}>
           <Text style={styles.searchListRowText} >{rowData.Name}</Text>
         </TouchableOpacity>
