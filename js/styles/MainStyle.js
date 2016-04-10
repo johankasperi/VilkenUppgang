@@ -21,6 +21,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    marginTop: 65,
+  },
+  wrap: {
+    flexWrap: 'wrap',
   },
   flowRight: {
     flexDirection: 'row',
@@ -67,6 +71,9 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flex: 1,
     flexDirection: 'row',
+  },
+  center: {
+    alignItems: 'center',
   },
   searchListRow: {
     alignSelf: 'stretch',
