@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   rowContainer: {
+    rowContainer: {
     alignItems: 'center',
     flexDirection: 'row',
   },
