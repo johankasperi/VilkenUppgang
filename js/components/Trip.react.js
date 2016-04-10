@@ -8,9 +8,12 @@ var {
 	Navigator
 } = React;
 
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var NavigationBar = require('react-native-navbar');
 var TripStore = require('../stores/TripStore');
 var TripActions = require('../actions/TripActions');
+var styles = require('../styles/MainStyle');
+
 
 
 class Trip extends React.Component {
@@ -44,12 +47,13 @@ class Trip extends React.Component {
 		return (
 			<View style={styles.nav}>
 		        <NavigationBar
-		          style={styles.navBar}
 		          title={titleConfig} 
 		          leftButton={leftButtonConfig}/>
-				<View style={styles.container}>
-					<Text>{trip[0].Origin.time}</Text>
-				</View>
+			  	<View style={styles.header}>
+        		  <Text style={styles.headerTitle}>{this.state.trip.LegList.Leg[0].Origin.name} </Text>
+        		  <View><Icon name="trending-flat" size={25} color="#FFFFFF" /></View>
+	              <Text style={styles.headerTitle}> {this.state.trip.LegList.Leg[this.state.trip.LegList.Leg.length-1].Destination.name}</Text>
+	          	</View>
 			</View>
 			)
 	}

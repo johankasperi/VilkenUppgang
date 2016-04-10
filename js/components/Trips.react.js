@@ -9,13 +9,27 @@ var {
   Navigator
 } = React;
 
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var NavigationBar = require('react-native-navbar');
+var DesiredTripStore = require('../stores/DesiredTripStore');
 var TripActions = require('../actions/TripActions');
 var TripStore = require('../stores/TripStore');
 var Trip = require('./Trip.react');
 var styles = require('../styles/MainStyle');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var i = 0;
+
+var lineColors = {};
+lineColors[10] = "#3B73B9"; //Blå
+lineColors[11] = "#3B73B9"; //Blå
+lineColors[13] = "#D43A34"; //Röd
+lineColors[14] = "#D43A34"; //Röd
+lineColors[17] = "#77ae5a"; //Grön
+lineColors[18] = "#77ae5a"; //Grön
+lineColors[19] = "#77ae5a"; //Grön
+
+
+
 
 class Trips extends React.Component {
 
@@ -43,18 +57,17 @@ class Trips extends React.Component {
 	renderRow(rowData, sectionID, rowID) {
 		var trip = rowData.LegList.Leg;
     var lastIdx = trip.length-1;
-    console.log(rowID);
 	    return (
-        <TouchableHighlight onPress={()=>this._goToTrip(rowID)}>
+        <TouchableHighlight onPress={()=>this._goToTrip(rowID)} underlayColor="#FFFFFF">
         <View style={styles.tripsRow}>
 	        <View style={styles.tripsColumn}>
             <Text>{trip[0].Origin.time}</Text>
-	          <Text>{this.tripChanges(trip)}</Text>
+	          <View style={styles.changesRow}>{this.tripChanges(trip)}</View>
           </View>
-          <View style={styles.tripsColumnMid}><Text>-></Text></View>
+          <View style={styles.tripsColumnMid}><Icon name="trending-flat" size={30} color="#CCCCCC" /></View>
           <View style={styles.tripsColumnRight}>
             <Text>{trip[lastIdx].Destination.time}</Text>
-	          <Text>Restid: {rowData.dur} min</Text>
+	          <Text style={styles.timeDur}>{rowData.dur} min</Text>
           </View>
         </View>
         </TouchableHighlight>
@@ -62,13 +75,49 @@ class Trips extends React.Component {
   	}
 
   	tripChanges(trip) {
-  		var changes = "";
+
+  		var changes = [];
+      var type = "";
+      var shortType = "";
   		for(var i=0; i<trip.length;i++) {
-  			changes = changes + trip[i].type;
-        if(i+1 < trip.length) {
-          changes = changes + " -> ";
+        var hide = false;
+        if("hide" in trip[i]) {
+          if(trip[i].hide === "true") {
+            hide = true;
+          }
         }
-  		}
+        if(!hide) {
+            var color = "#CCCCCC";
+            if(trip[i].type === "METRO") {
+              color = lineColors[parseInt(trip[i].line)];
+              type = "subway";
+              shortType = "T";
+            }
+            else if(trip[i].type === "TRAM") {
+              type = "tram";
+            }
+            else if(trip[i].type === "BUS" || trip[i].type === "NARBUSS") {
+              if(trip[i].name.indexOf("blåbuss") > -1) {
+                color = "#3B73B9";
+              }
+              else {
+                color = "#D43A34";
+              }
+              type = "directions-bus";
+              shortType = "B";
+            }
+            else if(trip[i].type === "FERRY" || trip[i].type === "SHIP") {
+              type = "directions-boat";
+            }
+            else if(trip[i].type === "WALK") {
+              type = "directions-walk";
+            }
+      			changes.push(<View style={styles.changesColumn}><Icon name={type} size={20} color={color} /><Text style={styles.lineNumber}>{shortType}{trip[i].line}</Text></View>);
+            if(i < trip.length-2) {
+              changes.push(<Icon name="keyboard-arrow-right" size={20} color="#CCCCCC"/>);
+            }
+  		  }
+      }
   		return changes;
   	}
 
@@ -83,27 +132,39 @@ class Trips extends React.Component {
 		return(
       <View style={styles.nav}>
         <NavigationBar
-          style={styles.navBar}
           title={titleConfig} 
           leftButton={leftButtonConfig}/>
   			<View style={styles.listContainer}>
-  			  <Text>{this.state.origin} - {this.state.destiantion}</Text>
+  			  <View style={styles.header}>
+            <Text style={styles.headerTitle}>{this.state.origin} </Text>
+            <View><Icon name="trending-flat" size={25} color="#FFFFFF" /></View>
+            <Text style={styles.headerTitle}> {this.state.destiantion}</Text>
+          </View>
   	      <ListView
   	        dataSource={this.state.dataSource}
   	        renderRow={this.renderRow.bind(this)}
             renderHeader={this._renderHeader.bind(this)}
             renderFooter={this._renderFooter.bind(this)} />
-
   		  </View>
+        <View style={styles.footer}>
+          <View style={styles.footerLeft}>
+            <Icon name="today" size={30} color="#4F8EF7" />
+            <Text style={styles.footerText}>{DesiredTripStore.getFormattedDate()}</Text>
+          </View>
+          <View style={styles.footerRight}>
+            <Icon name="access-time" size={30} color="#4F8EF7" />
+            <Text style={styles.footerText}>{DesiredTripStore.getFormattedTime()}</Text>
+          </View>
+        </View>
       </View>
     )
 	}
 
   _renderHeader() {
     return (
-          <TouchableHighlight onPress={()=>this._getEarlierTrips()}>
-            <View>
-              <Text>Tidigare</Text>
+          <TouchableHighlight onPress={()=>this._getEarlierTrips()} underlayColor="#FFFFFF">
+            <View style={styles.listFooter}>
+              <Icon name="keyboard-arrow-up" size={30} color="#4F8EF7" />
             </View>
           </TouchableHighlight>
       )
@@ -111,9 +172,9 @@ class Trips extends React.Component {
 
   _renderFooter() {
     return (
-          <TouchableHighlight onPress={()=>this._getLaterTrips()}>
-            <View>
-              <Text>Senare</Text>
+          <TouchableHighlight onPress={()=>this._getLaterTrips()} underlayColor="#FFFFFF">
+            <View style={styles.listFooter}>
+              <Icon name="keyboard-arrow-down" size={30} color="#4F8EF7" />
             </View>
           </TouchableHighlight>
       )

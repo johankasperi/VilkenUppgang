@@ -93,13 +93,74 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
     padding: 10,
     borderBottomWidth: 0.7,
     borderBottomColor: '#CCCCCC'
   },
   listContainer: {
     flex: 1,
+  },
+  listFooter: {
+    alignItems: 'center',
+  },
+  footer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    padding: 10,
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: -3,
+      width: 0
+    },
+  },
+  footerRight: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  footerLeft: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  footerText: {
+    fontSize: 12,
+  },
+  header: {
+    backgroundColor: '#4F8EF7',
+    height: 50,
+    justifyContent:'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    shadowColor: '#000000',
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: 3,
+      width: 0
+    },
+  },
+  headerTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+  },
+  changesRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center'
+  },
+  changesColumn: {
+    paddingRight: 5,
+    alignItems: 'center',
+  },
+  lineNumber: {
+    fontSize: 11,
+  },
+  timeDur: {
+    fontWeight: 'bold',
   }
 });
 
