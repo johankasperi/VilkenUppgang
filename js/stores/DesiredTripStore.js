@@ -11,11 +11,15 @@ var desiredTrip = {
   id: null,
   from: {
     name: null,
-    id: null
+    id: null,
+    lat: null,
+    lon: null
   },
   to: {
     name: null,
-    id: null
+    id: null,
+    lat: null,
+    lon: null
   },
   date: new Date(),
   timeType: "departure",
@@ -44,11 +48,15 @@ function destroy() {
     id: null,
     from: {
       name: null,
-      id: null
+      id: null,
+      lat: null,
+      lon: null
     },
     to: {
       name: null,
-      id: null
+      id: null,
+      lat: null,
+      lon: null
     },
     date: new Date(),
     timeType: "departure",

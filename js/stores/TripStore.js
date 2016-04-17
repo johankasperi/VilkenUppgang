@@ -107,6 +107,7 @@ AppDispatcher.register(function(payload) {
 
     case "GET_TRIPS":
       // TODO: Fixa en check om tomt
+      console.log(payload.data);
       setTrips(payload.data);
    	  TripStore.emitChange();
       break;

@@ -134,22 +134,27 @@ class PlaceSearch extends Component {
   }
 
   _setPlace(data) {
+    console.log(data.X);
+    var lon = data.X.slice(0, 2) + "." + data.X.slice(2, -1);
+    console.log(lon);
+    var lat = data.Y.slice(0, 2) + "." + data.Y.slice(2, -1);
     if(this.state.placeType === "from") {
-      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETFROM", from: {id: data.SiteId, name: data.Name}});
+      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETFROM", from: {id: data.SiteId, name: data.Name, lat: lat, lon: lon }});
     }
     else {
-      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETTO", to: {id: data.SiteId, name: data.Name}});
+      AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETTO", to: {id: data.SiteId, name: data.Name, lat: lat, lon: lon }});
     }
     this._closeView();
   }
 
   _addFavorite(data, isFavorite) {
-    console.log(isFavorite);
+    var lon = data.X.slice(0, 2) + "." + data.X.slice(2, -1);
+    var lat = data.Y.slice(0, 2) + "." + data.Y.slice(2, -1);
     if(isFavorite) {
-      AppDispatcher.dispatch({actionType: "REMOVE_FAVORITE", favorite: {id: data.SiteId, name: data.Name}});
+      AppDispatcher.dispatch({actionType: "REMOVE_FAVORITE", favorite: {id: data.SiteId, name: data.Name, lat: lat, lon: lon }});
     }
     else {
-      AppDispatcher.dispatch({actionType: "ADD_FAVORITE", favorite: {id: data.SiteId, name: data.Name}});
+      AppDispatcher.dispatch({actionType: "ADD_FAVORITE", favorite: {id: data.SiteId, name: data.Name, lat: lat, lon: lon }});
     }
   }
 

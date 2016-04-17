@@ -38,7 +38,22 @@ module.exports = {
 
 
 		var query = "http://api.sl.se/api2/TravelplannerV2/trip.json?key=" + apiKey;
-		query = query + "&originId=" + trip.from.id + "&destId=" + trip.to.id + "&searchForArrival=" + searchForArrival + "&numTrips=" + numTrips;
+		var origin = "";
+		if(trip.from.id != 0) {
+			origin = "&originId=" + trip.from.id;
+		}
+		else {
+			origin = "&originCoordName=" + encodeURIComponent(trip.from.name) + "&originCoordLong=" + trip.from.lon + "&originCoordLat=" + trip.from.lat;
+
+		}
+		var destination = ""
+		if(trip.to.id != 0) {
+			destination = "&destId=" + trip.to.id;
+		}
+		else {
+			destination = "&destCoordName=" + encodeURIComponent(trip.to.name) + "&destCoordLong=" + trip.to.lon + "&destCoordLat=" + trip.to.lat;;
+		}
+		query = query + origin + destination + "&searchForArrival=" + searchForArrival + "&numTrips=" + numTrips;
 
 		if(dateTime != null) {
 			query = query + "&date=" + DesiredTripStore.getFormattedDate(dateTime) + "&time=" + DesiredTripStore.getFormattedTime(dateTime);
