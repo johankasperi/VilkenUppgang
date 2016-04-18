@@ -108,7 +108,7 @@ class PlaceSearch extends Component {
   _renderRow(rowData) {
     var isFavorite = false;
     for(var i = 0; i < this.state.favorites.length; i++) {
-      if(this.state.favorites[i].id === rowData.SiteId) {
+      if(this.state.favorites[i].name === rowData.Name) {
         isFavorite = true;
       }
     }

@@ -12,6 +12,7 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var NavigationBar = require('react-native-navbar');
 var TripStore = require('../stores/TripStore');
+var DesiredTripStore = require('../stores/DesiredTripStore');
 var TripActions = require('../actions/TripActions');
 var styles = require('../styles/MainStyle');
 
@@ -23,8 +24,6 @@ lineColors[14] = "#D43A34"; //Röd
 lineColors[17] = "#77ae5a"; //Grön
 lineColors[18] = "#77ae5a"; //Grön
 lineColors[19] = "#77ae5a"; //Grön
-
-
 
 class Trip extends React.Component {
 
@@ -46,14 +45,13 @@ class Trip extends React.Component {
 
 	render() {
 		const titleConfig = {
-	      title: 'Färdbeskrivning',
-	    };
-	    const leftButtonConfig = {
-	      title: 'Tillbaka',
-	      handler: () => this._closeView()
-	    };
+      title: 'Färdbeskrivning',
+    };
+    const leftButtonConfig = {
+      title: 'Tillbaka',
+      handler: () => this._closeView()
+    };
 		var trip = this.state.trip.LegList.Leg;
-		console.log(trip);
 		return (
 			<View style={styles.nav}>
 		        <NavigationBar
@@ -75,52 +73,59 @@ class Trip extends React.Component {
 		var type;
 		for(var i=0;i<trip.length;i++) {
 			var hide = false;
-	        if("hide" in trip[i]) {
-	          if(trip[i].hide === "true") {
-	            hide = true;
-	          }
-	        }
-        	if(!hide) {
-        		var originTitle = styles.originTitle;
-        		var destinationTitle = styles.destinationTitle;
-        		if(i === 0) {
-        			originTitle = styles.firstOriginTitle;
-        		}
-        		else if(i === trip.length-1) {
-        			destinationTitle = styles.lastDestinationTitle;
-        		}
-        		var color = "#CCCCCC";
+      var exitInfo = "";
+      if("hide" in trip[i]) {
+        if(trip[i].hide === "true") {
+          hide = true;
+        }
+      }
+    	if(!hide) {
+    		var originTitle = styles.originTitle;
+    		var destinationTitle = styles.destinationTitle;
+    		if(i === 0) {
+    			originTitle = styles.firstOriginTitle;
+    		}
+    		else if(i === trip.length-1) {
+    			destinationTitle = styles.lastDestinationTitle;
+    		}
+    		var color = "#CCCCCC";
 				instructions = this._capitalizeFirstLetter(trip[i].name) + " mot " + trip[i].dir;
+
+        console.log(trip[i]);
 				if(trip[i].type === "METRO") {
-	              color = lineColors[parseInt(trip[i].line)];
-	              type = "subway";
-	            }
-	            else if(trip[i].type === "TRAM") {
-	              type = "tram";
-	            }
-	            else if(trip[i].type === "BUS" || trip[i].type === "NARBUSS") {
-	              if(trip[i].name.indexOf("blåbuss") > -1) {
-	                color = "#3B73B9";
-	              }
-	              else {
-	                color = "#D43A34";
-	              }
-	              type = "directions-bus";
-	            }
-	            else if(trip[i].type === "FERRY" || trip[i].type === "SHIP") {
-	              type = "directions-boat";
-	            }
-	            else if(trip[i].type === "WALK") {
-	              type = "directions-walk";
-	              instructions = "Gå " + trip[i].dist + "m";
-	            }
-	            else if(trip[i].type === "TRAIN") {
-	              type = "train";
-	            }
+          color = lineColors[parseInt(trip[i].line)];
+          type = "subway";
+          if(trip[i].exitInfo) {
+            exitInfo = "Ta uppgången "+trip[i].exitInfo.exitName;
+          }
+        }
+        else if(trip[i].type === "TRAM") {
+          type = "tram";
+        }
+        else if(trip[i].type === "BUS" || trip[i].type === "NARBUSS") {
+          if(trip[i].name.indexOf("blåbuss") > -1) {
+            color = "#3B73B9";
+          }
+          else {
+            color = "#D43A34";
+          }
+          type = "directions-bus";
+        }
+        else if(trip[i].type === "FERRY" || trip[i].type === "SHIP") {
+          type = "directions-boat";
+        }
+        else if(trip[i].type === "WALK") {
+          type = "directions-walk";
+          instructions = "Gå " + trip[i].dist + "m";
+        }
+        else if(trip[i].type === "TRAIN") {
+          type = "train";
+        }
 				changes.push(
 					<View style={styles.changeContainer}>
 					  <View style={styles.rowContainer}><Text style={originTitle}> {trip[i].Origin.time} {trip[i].Origin.name}</Text></View>
-					  <View style={styles.journeyDetails}><Icon name={type} size={25} color={color} /><Text> {instructions}</Text></View>
+					  <View style={styles.journeyDetails}><Icon name={type} size={25} color={color} /><Text>{instructions}</Text></View>
+            <View style={styles.journeyDetails}><Text>{exitInfo}</Text></View>
 					  <View style={styles.rowContainer}><Text style={destinationTitle}> {trip[i].Destination.time} {trip[i].Destination.name}</Text></View>
 					  <Text style={styles.bulletPoint}>•</Text>
 					</View>
@@ -135,21 +140,21 @@ class Trip extends React.Component {
 	}
 
 	_onChange() {
-      this.setState({trip: TripStore.getTrip(this.props.tripIdx) });
-    }
+    this.setState({trip: TripStore.getTrip(this.props.tripIdx) });
+  }
 
-    _closeView() {
-    	this.props.navigator.pop();
-  	}
+  _closeView() {
+  	this.props.navigator.pop();
+	}
 
-  	 _renderLeftButton () {
-        return (
-          <View style={styles.leftNavButton}>
-          <TouchableHighlight onPress={()=>this._closeView()} underlayColor="#FFFFFF">
-              <Icon name="keyboard-arrow-left" size={30} color="#4F8EF7" />
-          </TouchableHighlight>
-          </View>
-      )
+	 _renderLeftButton () {
+    return (
+      <View style={styles.leftNavButton}>
+      <TouchableHighlight onPress={()=>this._closeView()} underlayColor="#FFFFFF">
+          <Icon name="keyboard-arrow-left" size={30} color="#4F8EF7" />
+      </TouchableHighlight>
+      </View>
+    )
   }
 }
 

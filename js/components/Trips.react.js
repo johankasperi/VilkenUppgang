@@ -245,7 +245,6 @@ class Trips extends React.Component {
 
 	_onChange() {
       this.setState({dataSource: ds.cloneWithRows(TripStore.getAll()), origin: TripStore.getOrigin(), destiantion: TripStore.getDestination() });
-      console.log(this.state.dataSource);
 	}
   _onChangeDesiered() {
     this.setState({date: DesiredTripStore.getFormattedDate(), time: DesiredTripStore.getFormattedTime() });

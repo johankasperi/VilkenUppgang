@@ -9,8 +9,7 @@ var CHANGE_EVENT = 'change';
 var _trips = [];
 
 var setTrips = function(trips) {
-  console.log(trips);
-	_trips = getCorrectFormat(trips);
+	_trips = trips;
 }
 
 var appendTrips = function(trips) {
@@ -26,19 +25,9 @@ var prependTrips = function(trips) {
   _trips = trips;
 }
 
-var getCorrectFormat = function(trips) {
-	trips = trips.TripList.Trip;
-	for(var i=0;i<trips.length;i++) {
-		var trip = [];
-		if(!Array.isArray(trips[i].LegList.Leg)) {
-			trip.push(trips[i].LegList.Leg)
-		}
-		else {
-			trip = trips[i].LegList.Leg;
-		}
-		trips[i].LegList.Leg = trip;
-	}
-	return trips;
+var addExit = function(exitData) {
+  var trip = _trips[exitData.tripId];
+  trip.LegList.Leg[trip.LegList.Leg.length - 2].exitInfo = exitData.exit;
 }
 
 var TripStore = assign({}, EventEmitter.prototype, {
@@ -107,7 +96,6 @@ AppDispatcher.register(function(payload) {
 
     case "GET_TRIPS":
       // TODO: Fixa en check om tomt
-      console.log(payload.data);
       setTrips(payload.data);
    	  TripStore.emitChange();
       break;
@@ -121,6 +109,12 @@ AppDispatcher.register(function(payload) {
     case "GET_EARLIER_TRIPS":
       // TODO: Fixa en check om tomt
       prependTrips(payload.data);
+      TripStore.emitChange();
+      break;
+
+    case "SET_EXIT":
+      // TODO: Fixa en check om tomt
+      addExit(payload.data);
       TripStore.emitChange();
       break;
 
