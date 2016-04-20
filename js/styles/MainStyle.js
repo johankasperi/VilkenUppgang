@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     height: 36,
   },
   searchListRowText: {
-    fontSize: 18
+    fontSize: 18,
   },
   searchHistoryText: {
     flexWrap: 'wrap'
@@ -230,6 +230,11 @@ const styles = StyleSheet.create({
   rowContainer: {
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  activityIndicator: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
 });
 

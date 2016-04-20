@@ -9,7 +9,7 @@ var {
   Navigator
 } = React;
 
-
+import DateTimePicker from 'react-native-datetime';
 const AppDispatcher = require('../dispatchers/AppDispatcher');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var NavigationBar = require('react-native-navbar');
@@ -18,7 +18,8 @@ var TripActions = require('../actions/TripActions');
 var TripStore = require('../stores/TripStore');
 var Trip = require('./Trip.react');
 var styles = require('../styles/MainStyle');
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var ActivityIndicator = require('./ActivityIndicator');
+//var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var i = 0;
 
 var lineColors = {};
@@ -39,15 +40,25 @@ class Trips extends React.Component {
 		TripActions.getTrips();
 		super(props);
     	this.state = {
-      		dataSource: ds.cloneWithRows(TripStore.getAll()),
-      		origin:TripStore.getOrigin(),
-      		destiantion:TripStore.getDestination(),
-          date: DesiredTripStore.getFormattedDate(),
-          time: DesiredTripStore.getFormattedTime()
+      		dataSource: new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2,
+          }),
+          loaded: false,
+      		origin:DesiredTripStore.get().from.name,
+      		destiantion:DesiredTripStore.get().to.name,
+          date: DesiredTripStore.get().date,
+          formattedDate: DesiredTripStore.getFormattedDate(),
+          formattedTime: DesiredTripStore.getFormattedTime(),
     	};
 
-		this._onChange = this._onChange.bind(this);
     this._onChangeDesiered = this._onChangeDesiered.bind(this)
+
+    this.picker = null;
+    this._showDatePicker = this._showDatePicker.bind(this);
+    this._showTimePicker = this._showTimePicker.bind(this);
+    this._reverseDirection = this._reverseDirection.bind(this);
+    this._onChange = this._onChange.bind(this);
+
 
 
 	}
@@ -154,6 +165,7 @@ class Trips extends React.Component {
     else {
       timeType = "Framme";
     }
+    
 		return(
       <View style={styles.nav}>
         <NavigationBar
@@ -165,31 +177,58 @@ class Trips extends React.Component {
             <View><Icon name="trending-flat" size={25} color="#FFFFFF" /></View>
             <Text style={styles.headerTitle}> {this.state.destiantion}</Text>
           </View>
-  	      <ListView
-  	        dataSource={this.state.dataSource}
-  	        renderRow={this.renderRow.bind(this)}
-            renderHeader={this._renderHeader.bind(this)}
-            renderFooter={this._renderFooter.bind(this)} />
+  	      {this._renderContent()}
   		  </View>
         <View style={styles.footer}>
-          <View style={styles.footerLeft}>
-            <Icon name="today" size={25} color="#4F8EF7" />
-            <Text style={styles.footerText}>{this.state.date}</Text>
-          </View>
-          <View style={styles.footerMid}>
-            <Icon name="access-time" size={25} color="#4F8EF7" />
-            <Text style={styles.footerText}>{timeType} {this.state.time}</Text>
-          </View>
+          <TouchableHighlight style={styles.footerLeft} underlayColor="#FFFFFF" onPress={()=>this._showDatePicker()}>
+            <View style={styles.footerLeft}>
+              <Icon name="today" size={25} color="#4F8EF7" />
+              <Text style={styles.footerText}>{this.state.formattedDate}</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.footerMid} underlayColor="#FFFFFF" onPress={()=>this._showTimePicker()}>
+            <View style={styles.footerMid}>
+              <Icon name="access-time" size={25} color="#4F8EF7" />
+              <Text style={styles.footerText}>{timeType} {this.state.formattedTime}</Text>
+            </View>
+          </TouchableHighlight>
           <TouchableHighlight style={styles.footerRight} underlayColor="#FFFFFF" onPress={()=>this._reverseDirection()}>
-          <View style={styles.footerRight}>
-            <Icon style={styles.reverseDir} name="compare-arrows" size={25} color="#4F8EF7" />
-            <Text style={styles.footerText}>Byt riktning</Text>
-          </View>
+            <View style={styles.footerRight}>
+              <Icon style={styles.reverseDir} name="compare-arrows" size={25} color="#4F8EF7" />
+              <Text style={styles.footerText}>Byt riktning</Text>
+            </View>
           </TouchableHighlight>
         </View>
+        <DateTimePicker cancelText="Cancel" okText="Done" ref={(picker)=>{this.picker = picker}} />
       </View>
     )
 	}
+
+  _renderContent() {
+    if (!this.state.loaded) {
+      return (
+          <ActivityIndicator />
+        )
+    }
+
+    return (
+      <ListView
+        dataSource={this.state.dataSource}
+        renderRow={this.renderRow.bind(this)}
+        renderHeader={this._renderHeader.bind(this)}
+        renderFooter={this._renderFooter.bind(this)} />
+    )
+  }
+
+  _renderLoadingView() {
+    return (
+      <View style={styles.container}>
+        <Text>
+          Hämtar resan...
+        </Text>
+      </View>
+    );
+  }
 
   _renderHeader() {
     return (
@@ -212,22 +251,21 @@ class Trips extends React.Component {
   }
 
   _getEarlierTrips () {
-    var date = new Date(TripStore.getFirstArrival().getTime() - 60000);
-    console.log(date);
     TripActions.getTrips(TripStore.getFirstArrival(), true);
   }
 
   _getLaterTrips () {
-    var date = new Date(TripStore.getLastDeparture().getTime() + 60000);
-    console.log(date);
     TripActions.getTrips(TripStore.getLastDeparture());
   }
 
   _reverseDirection() {
+    this.state.loaded = false;
     var to = DesiredTripStore.get().from;
     var from = DesiredTripStore.get().to;
-    AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETFROM", from: {id: from.id, name: from.name}});
-    AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETTO", to: {id: to.id, name: to.name}});
+    this.state.origin = from.name;
+    this.state.destiantion = to.name;
+    AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETFROM", from: from});
+    AppDispatcher.dispatch({actionType: "DESIRED_TRIP_SETTO", to: to});
     TripActions.getTrips();
   }
 
@@ -239,15 +277,35 @@ class Trips extends React.Component {
     });
   }
 
+  _showDatePicker() {
+    var date = this.state.date;
+    this.picker.showDatePicker(date, (d) => {
+      this.state.loaded = false;
+      AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SETDATE", date: d });
+      this.setState({ date: d });
+      TripActions.getTrips();
+    });
+  }
+
+  _showTimePicker() {
+    var date = this.state.date;
+    this.picker.showTimePicker(date, (d) => {
+      this.state.loaded = false;
+      AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SETDATE", date: d });
+      this.setState({ date: d });
+      TripActions.getTrips();
+    });
+  }
+
   _closeView() {
     this.props.navigator.pop();
   }
 
 	_onChange() {
-      this.setState({dataSource: ds.cloneWithRows(TripStore.getAll()), origin: TripStore.getOrigin(), destiantion: TripStore.getDestination() });
+      this.setState({dataSource: this.state.dataSource.cloneWithRows(TripStore.getAll()), loaded: true, origin: TripStore.getOrigin(), destiantion: TripStore.getDestination() });
 	}
   _onChangeDesiered() {
-    this.setState({date: DesiredTripStore.getFormattedDate(), time: DesiredTripStore.getFormattedTime() });
+    this.setState({formattedDate: DesiredTripStore.getFormattedDate(), formattedTime: DesiredTripStore.getFormattedTime() });
   }
 
   _renderLeftButton () {

@@ -70,6 +70,7 @@ function getExitInfo(trip) {
 }
 
 function getCorrectFormat(trips) {
+	console.log("APAPPA");
 	trips = trips.TripList.Trip;
 	for(var i=0;i<trips.length;i++) {
 		var trip = [];

@@ -61,7 +61,9 @@ class PlaceSearch extends Component {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={()=>this._setPlace(rowData)}>
+          <View style={styles.column}>
           <Text style={styles.searchListRowText} >{rowData.name}</Text>
+          </View>
         </TouchableOpacity>
       </View>
     )
