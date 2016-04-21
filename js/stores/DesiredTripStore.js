@@ -65,8 +65,9 @@ function destroy() {
 
 function setFromStorage(id) {
   if(id < storedTrips.length) {
-    setFrom(storedTrips[id].from);
-    setTo(storedTrips[id].to);
+    var storedTrip = _.find(storedTrips, function(trip) { return trip.id == id; });
+    setFrom(storedTrip.from);
+    setTo(storedTrip.to);
   }
 }
 
@@ -80,12 +81,17 @@ function loadTrips(callback) {
 }
 
 function saveTrips() {
+  console.log(storedTrips);
   var newTrip = JSON.parse(JSON.stringify(desiredTrip));
   newTrip.id = storedTrips.length;
-  storedTrips.push(newTrip);
-  if(storedTrips.length > 10) {
-    storedTrips.splice(1, storedTrips.length - 1);
+  storedTrips = _.reject(storedTrips, function(trip) {
+    return trip.from.name == newTrip.from.name && trip.to.name == newTrip.to.name;
+  });
+  storedTrips.unshift(newTrip);
+  if(storedTrips.length > 5) {
+    storedTrips.splice(1, 5);
   }
+  console.log(storedTrips);
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
 
@@ -116,7 +122,7 @@ var DesiredTripStore = assign({}, EventEmitter.prototype, {
     return hours + ':' + minutes;
   },
 
-    getFormattedDate: function(dateTime = desiredTrip.date) {
+  getFormattedDate: function(dateTime = desiredTrip.date) {
     var year = dateTime.getFullYear();
     var month = dateTime.getMonth()+1;
     month = month > 9 ? month : "0" + month.toString();

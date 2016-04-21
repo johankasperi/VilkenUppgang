@@ -29,6 +29,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'stretch'
   },
+  flowItemLeft: {
+    marginRight: 7.5
+  },
+  flowItemRight: {
+    marginLeft: 7.5
+  },
   buttonText: {
     fontSize: 18,
     color: 'white',
