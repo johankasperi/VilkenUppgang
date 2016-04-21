@@ -64,11 +64,9 @@ function destroy() {
 }
 
 function setFromStorage(id) {
-  if(id < storedTrips.length) {
-    var storedTrip = _.find(storedTrips, function(trip) { return trip.id == id; });
-    setFrom(storedTrip.from);
-    setTo(storedTrip.to);
-  }
+  var storedTrip = _.find(storedTrips, function(trip) { return trip.id == id; });
+  setFrom(storedTrip.from);
+  setTo(storedTrip.to);
 }
 
 function loadTrips(callback) {
@@ -82,7 +80,7 @@ function loadTrips(callback) {
 
 function saveTrips() {
   var newTrip = JSON.parse(JSON.stringify(desiredTrip));
-  newTrip.id = storedTrips.length;
+  newTrip.id = Date.now();
   storedTrips = _.reject(storedTrips, function(trip) {
     return trip.from.name == newTrip.from.name && trip.to.name == newTrip.to.name;
   });
@@ -90,6 +88,7 @@ function saveTrips() {
   if(storedTrips.length > 5) {
     storedTrips = storedTrips.splice(0, 5);
   }
+  console.log(storedTrips);
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
 

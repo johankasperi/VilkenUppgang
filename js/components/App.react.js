@@ -10,6 +10,13 @@ var Trip = require('./Trip.react');
 var Search = require('./Search.react');
 var Trips = require('./Trips.react');
 
+console.ignoredYellowBox = [
+  'Warning: Failed propType',
+  'Sticky header index 0',
+  'Warning: Each child'
+  // Other warnings you don't want like 'jsSchedulingOverhead',
+];
+
 class App extends Component {
 
   renderScene(route, navigator) {

@@ -69,6 +69,7 @@ class TripHistory extends Component {
   }
 
   _setActive(id) {
+    console.log(id);
     AppDispatcher.dispatch({ actionType: "DESIRED_TRIP_SETFROMSTORAGE", id: id });
     this.props.navigator.push({
       sceneConfig: Navigator.SceneConfigs.FloatFromRight,
