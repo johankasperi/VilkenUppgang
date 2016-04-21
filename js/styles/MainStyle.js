@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
   },
   changesContainer: {
     padding: 10,
+    flex: 1,
   },
   journeyDetails: {
     alignItems: 'center',
@@ -241,6 +242,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+  },
+  map: {
+    flex: 1,
+    height: 150,
+    width: 100,
   },
 });
 
