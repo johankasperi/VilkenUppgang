@@ -54,3 +54,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+
+## Other
+android/local.properties
