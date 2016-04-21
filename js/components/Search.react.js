@@ -67,12 +67,11 @@ class Search extends Component {
     };
 
     return (
-      <View>
         <View style={styles.nav}>
           <NavigationBar
             style={styles.navBar}
             title={titleConfig} />
-          <View style={styles.container}>
+          <ScrollView style={styles.container}>
             <TouchableOpacity
               style={styles.searchInput}
               onPress={this._searchFrom.bind(this)}
@@ -94,22 +93,20 @@ class Search extends Component {
               </TouchableHighlight>
             </View>
             <View style={styles.flowRight}>
-              <TouchableHighlight style={[styles.button, styles.buttonActive]} onPress={this._showDatePicker}>
+              <TouchableHighlight style={[styles.button, styles.buttonActive, styles.flowItemLeft]} onPress={this._showDatePicker}>
                 <Text style={styles.buttonText}>{this.state.formattedDate}</Text>
               </TouchableHighlight>
-              <TouchableHighlight style={[styles.button, styles.buttonActive]} onPress={this._showTimePicker}>
+              <TouchableHighlight style={[styles.button, styles.buttonActive, styles.flowItemRigt]} onPress={this._showTimePicker}>
                 <Text style={styles.buttonText}>{this.state.formattedTime}</Text>
               </TouchableHighlight>
             </View>
             <TouchableHighlight style={[styles.button, styles.buttonActive]} onPress={this._goToSearchResult.bind(this)}>
               <Text style={styles.buttonText}>Sök</Text>
             </TouchableHighlight>
-            <TripHistory />
-          </View>
+            <TripHistory navigator={this.props.navigator}/>
+          </ScrollView>
+          <DateTimePicker cancelText="Cancel" okText="Done" ref={(picker)=>{this.picker = picker}} />
         </View>
-        <DateTimePicker cancelText="Cancel" okText="Done" ref={(picker)=>{this.picker = picker}} />
-      </View>
-
     )
   }
 
