@@ -74,7 +74,13 @@ class Trip extends React.Component {
           </TouchableHighlight>
           <TouchableHighlight style={styles.footerMid} underlayColor="#FFFFFF" onPress={()=>this.setState({page: 2})}>
             <View style={styles.footerMid}>
-              <Icon name="map" size={25} color={this.state.page == 2 ? "#4F8EF7" : "#CCCCCC"} />
+              <Icon name="transfer-within-a-station" size={25} color={this.state.page == 2 ? "#4F8EF7" : "#CCCCCC"} />
+              <Text style={styles.footerText}>Vilken uppgång?</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.footerRight} underlayColor="#FFFFFF" onPress={()=>this.setState({page: 3})}>
+            <View style={styles.footerRight}>
+              <Icon name="map" size={25} color={this.state.page == 3 ? "#4F8EF7" : "#CCCCCC"} />
               <Text style={styles.footerText}>Karta</Text>
             </View>
           </TouchableHighlight>
@@ -93,6 +99,9 @@ class Trip extends React.Component {
       )
     }
     else if(this.state.page == 2) {
+
+    }
+    else if(this.state.page == 3) {
       var middleLat = (parseFloat(trip[0].Origin.lat) + parseFloat(trip[trip.length-1].Destination.lat))/2;
       var middleLon = (parseFloat(trip[0].Origin.lon) + parseFloat(trip[trip.length-1].Destination.lon))/2;
       var lengthLat = Math.abs(parseFloat(trip[0].Origin.lat) - parseFloat(trip[trip.length-1].Destination.lat));
