@@ -7,6 +7,8 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.List;
 
+import com.keyee.datetime.*;
+
 public class MainActivity extends ReactActivity {
 
     /**
@@ -34,24 +36,8 @@ public class MainActivity extends ReactActivity {
     @Override
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
+            new RCTDateTimePickerPackage(this), // <------ add here 
             new MainReactPackage()
         );
-    }
-}
-
-import com.keyee.datetime.*;  // <--- import 
- 
-public class MainActivity extends ReactActivity {
-  ......
- 
-  /**
-   * A list of packages used by the app. If the app uses additional views
-   * or modules besides the default ones, add more packages here.
-   */
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-        new RCTDateTimePickerPackage(this), // <------ add here 
-        new MainReactPackage());
     }
 }
