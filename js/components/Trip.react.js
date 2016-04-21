@@ -6,7 +6,8 @@ var {
 	Text,
 	StyleSheet,
 	Navigator,
-	TouchableHighlight
+	TouchableHighlight,
+  MapView
 } = React;
 
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -30,7 +31,8 @@ class Trip extends React.Component {
 	constructor(props) {
 	  super(props);
 	  this.state = {
-	    trip: TripStore.getTrip(props.tripIdx)
+	    trip: TripStore.getTrip(props.tripIdx),
+      page: 1
 	  };
 	  this._onChange = this._onChange.bind(this);
 	}
@@ -54,18 +56,73 @@ class Trip extends React.Component {
 		var trip = this.state.trip.LegList.Leg;
 		return (
 			<View style={styles.nav}>
-		        <NavigationBar
-		          title={titleConfig} 
-		          leftButton={this._renderLeftButton()}/>
-		        <View style={styles.header}>
-        		  <Text style={styles.headerTitle}>{trip[0].Origin.name} </Text>
-        		  <View><Icon name="trending-flat" size={25} color="#FFFFFF" /></View>
-	              <Text style={styles.headerTitle}> {trip[trip.length-1].Destination.name}</Text>
-	          	</View>
-	          	<View style={styles.changesContainer}><View style={styles.timeline}>{this._renderTripChanges(trip)}</View></View>
+        <NavigationBar
+          title={titleConfig} 
+          leftButton={this._renderLeftButton()}/>
+        <View style={styles.header}>
+    		  <Text style={styles.headerTitle}>{trip[0].Origin.name} </Text>
+    		  <View><Icon name="trending-flat" size={25} color="#FFFFFF" /></View>
+          <Text style={styles.headerTitle}> {trip[trip.length-1].Destination.name}</Text>
+        </View>
+        {this._renderContent()}
+        <View style={styles.footer}>
+          <TouchableHighlight style={styles.footerLeft} underlayColor="#FFFFFF" onPress={()=>this.setState({page:1})}>
+            <View style={styles.footerLeft}>
+              <Icon name="directions" size={25} color={this.state.page == 1 ? "#4F8EF7" : "#CCCCCC"} />
+              <Text style={styles.footerText}>Rutt</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.footerMid} underlayColor="#FFFFFF" onPress={()=>this.setState({page: 2})}>
+            <View style={styles.footerMid}>
+              <Icon name="map" size={25} color={this.state.page == 2 ? "#4F8EF7" : "#CCCCCC"} />
+              <Text style={styles.footerText}>Karta</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
 			</View>
 			)
 	}
+
+  _renderContent() {
+    var trip = this.state.trip.LegList.Leg;
+    if(this.state.page == 1) {
+      return (
+      <View style={styles.changesContainer}>
+        <View style={styles.timeline}>{this._renderTripChanges(trip)}</View>
+      </View>
+      )
+    }
+    else if(this.state.page == 2) {
+      var middleLat = (parseFloat(trip[0].Origin.lat) + parseFloat(trip[trip.length-1].Destination.lat))/2;
+      var middleLon = (parseFloat(trip[0].Origin.lon) + parseFloat(trip[trip.length-1].Destination.lon))/2;
+      var lengthLat = Math.abs(parseFloat(trip[0].Origin.lat) - parseFloat(trip[trip.length-1].Destination.lat));
+      var lengthLon = Math.abs(parseFloat(trip[0].Origin.lon) - parseFloat(trip[trip.length-1].Destination.lon));
+      var coordinates = [];
+      for(var i=0;i<trip.length;i++) {
+        coordinates.push({latitude: parseFloat(trip[i].Origin.lat), longitude: parseFloat(trip[i].Origin.lon)});
+        coordinates.push({latitude: parseFloat(trip[i].Destination.lat), longitude: parseFloat(trip[i].Destination.lon)});
+      }
+      return (
+        <MapView
+        active={true}
+        style={styles.map}
+        region={{
+          latitude: middleLat,
+          longitude: middleLon,
+          latitudeDelta: lengthLat+0.1,
+          longitudeDelta: lengthLon+0.1
+        }}
+        showsUserLocation={true}
+        overlays={[{
+          coordinates: coordinates,
+          strokeColor: '#f007',
+          lineWidth: 3,
+        }]}
+      />
+      )
+    }
+  
+  }
 
 	_renderTripChanges(trip) {
 		var changes = [];
