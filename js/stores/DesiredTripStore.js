@@ -81,7 +81,6 @@ function loadTrips(callback) {
 }
 
 function saveTrips() {
-  console.log(storedTrips);
   var newTrip = JSON.parse(JSON.stringify(desiredTrip));
   newTrip.id = storedTrips.length;
   storedTrips = _.reject(storedTrips, function(trip) {
@@ -89,9 +88,8 @@ function saveTrips() {
   });
   storedTrips.unshift(newTrip);
   if(storedTrips.length > 5) {
-    storedTrips.splice(1, 5);
+    storedTrips = storedTrips.splice(0, 5);
   }
-  console.log(storedTrips);
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
 
