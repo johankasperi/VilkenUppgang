@@ -19,7 +19,6 @@ function coordDistance(coordA, coordB) {
           Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var d = R * c;
-  console.log(d);
   return d;
 }
 
@@ -65,12 +64,10 @@ function getExitInfo(trip) {
     }
   }
   trip.LegList.Leg = leg;
-  console.log(trip);
   return trip;
 }
 
 function getCorrectFormat(trips) {
-	console.log("APAPPA");
 	trips = trips.TripList.Trip;
 	for(var i=0;i<trips.length;i++) {
 		var trip = [];

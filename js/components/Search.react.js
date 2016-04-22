@@ -22,13 +22,16 @@ const TripHistory = require('./TripHistory.react')
 const PlacesStore = require('../stores/PlacesStore');
 const Trips = require('../components/Trips.react');
 
+function daysBetween(first, second) {
 
-function getPlaceItems(place) {
-  return (
-    <Text>
-      {place.Name}
-    </Text>
-  );
+    var one = new Date(first.getFullYear(), first.getMonth(), first.getDate());
+    var two = new Date(second.getFullYear(), second.getMonth(), second.getDate());
+
+    var millisecondsPerDay = 1000 * 60 * 60 * 24;
+    var millisBetween = two.getTime() - one.getTime();
+    var days = millisBetween / millisecondsPerDay;
+
+    return Math.floor(days);
 }
 
 class Search extends Component {
@@ -103,7 +106,7 @@ class Search extends Component {
             <TouchableHighlight style={[styles.button, styles.buttonActive]} onPress={this._goToSearchResult.bind(this)}>
               <Text style={styles.buttonText}>Sök</Text>
             </TouchableHighlight>
-            <TripHistory navigator={this.props.navigator}/>
+            <TripHistory goToSearchResult={this._goToSearchResult.bind(this)}/>
           </ScrollView>
           <DateTimePicker cancelText="Cancel" okText="Done" ref={(picker)=>{this.picker = picker}} />
         </View>
@@ -161,6 +164,26 @@ class Search extends Component {
       Alert.alert(
         'Vissa värden saknas!',
         'Du har inte fyllt i något på antingen "från" eller "till"-fältet.',
+        [
+          {text: 'OK'},
+        ]
+      );
+      return;
+    }
+    if(daysBetween(DesiredTripStore.get().date, new Date()) >= 1) {
+      Alert.alert(
+        'Felaktigt datum!',
+        'Du kan inte välja ett datum för avfärd som redan har varit.',
+        [
+          {text: 'OK'},
+        ]
+      );
+      return;
+    }
+    if(DesiredTripStore.get().from.name === DesiredTripStore.get().to.name) {
+      Alert.alert(
+        'Felaktiga värden!',
+        'Din destination kan inte vara samma som det ställe du åker ifrån.',
         [
           {text: 'OK'},
         ]

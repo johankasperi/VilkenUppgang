@@ -88,7 +88,6 @@ function saveTrips() {
   if(storedTrips.length > 5) {
     storedTrips = storedTrips.splice(0, 5);
   }
-  console.log(storedTrips);
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
 
