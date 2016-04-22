@@ -88,7 +88,6 @@ function saveTrips() {
   if(storedTrips.length > 5) {
     storedTrips = storedTrips.splice(0, 5);
   }
-  console.log(storedTrips);
   AsyncStorage.setItem(TRIPS_STORAGE_KEY, JSON.stringify(storedTrips), function(error) {});
 }
 
@@ -172,8 +171,6 @@ AppDispatcher.register(function(action) {
 
     case "DESIRED_TRIP_SETDATE":
       date = action.date;
-      console.log("DESIRED DATE:" + date);
-      console.log("STANDARD DATE:" +  new Date());
       if(date !== null) {
         setDate(date);
         DesiredTripStore.emitChange();

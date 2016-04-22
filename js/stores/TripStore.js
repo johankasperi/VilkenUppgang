@@ -28,6 +28,19 @@ var addExit = function(exitData) {
   trip.LegList.Leg[trip.LegList.Leg.length - 2].exitInfo = exitData.exit;
 }
 
+var getUTCDate = function(date, time) {
+    date = date.split("-");
+    var year = parseInt(date[0]);
+    var month = date[1]-1;
+    var day = parseInt(date[2]);
+    time = time.split(":");
+    var hours = parseInt(time[0]);
+    var minutes = parseInt(time[1]);
+    var d = new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
+    d.setTime( d.getTime() + new Date().getTimezoneOffset()*60*1000 );
+    return d;
+}
+
 var TripStore = assign({}, EventEmitter.prototype, {
   
   getAll: function() {
@@ -59,8 +72,7 @@ var TripStore = assign({}, EventEmitter.prototype, {
     var firstTrip = _trips[0].LegList.Leg;
     var date = firstTrip[firstTrip.length-1].Destination.date;
     var time = firstTrip[firstTrip.length-1].Destination.time;
-
-    var dateTime = new Date(date + ' ' + time + ':00');
+    var dateTime = getUTCDate(date, time);
     return dateTime;
   },
 
@@ -70,8 +82,8 @@ var TripStore = assign({}, EventEmitter.prototype, {
   	}
   	var lastTrip = _trips[_trips.length-1].LegList.Leg;
   	var date = lastTrip[0].Origin.date;
-  	var time = lastTrip[0].Origin.time;
-  	var dateTime = new Date(date + ' ' + time + ':00');
+    var time = lastTrip[0].Origin.time;
+    var dateTime = getUTCDate(date, time);
   	return dateTime;
   },
 
