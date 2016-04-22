@@ -65,12 +65,12 @@ function getExitInfo(trip) {
     }
   }
   trip.LegList.Leg = leg;
-  console.log(trip);
   return trip;
 }
 
 function getCorrectFormat(trips) {
 	console.log("APAPPA");
+  console.log(trips);
 	trips = trips.TripList.Trip;
 	for(var i=0;i<trips.length;i++) {
 		var trip = [];
@@ -143,6 +143,7 @@ module.exports = {
 	    .then((response) => response.json())
 	    .then((responseData) => {
 	    		var trips = getCorrectFormat(responseData);
+          console.log("LENGTH:"+trips.length);
 	    		for(var i = 0; i < trips.length; i++) {
 	    			trips[i] = getExitInfo(trips[i]);
 	    		}

@@ -172,6 +172,8 @@ AppDispatcher.register(function(action) {
 
     case "DESIRED_TRIP_SETDATE":
       date = action.date;
+      console.log("DESIRED DATE:" + date);
+      console.log("STANDARD DATE:" +  new Date());
       if(date !== null) {
         setDate(date);
         DesiredTripStore.emitChange();

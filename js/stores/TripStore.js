@@ -59,6 +59,7 @@ var TripStore = assign({}, EventEmitter.prototype, {
     var firstTrip = _trips[0].LegList.Leg;
     var date = firstTrip[firstTrip.length-1].Destination.date;
     var time = firstTrip[firstTrip.length-1].Destination.time;
+
     var dateTime = new Date(date + ' ' + time + ':00');
     return dateTime;
   },
