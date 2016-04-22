@@ -87,7 +87,7 @@ function getCorrectFormat(trips) {
 
 module.exports = {
 
-	getTrips: function(dateTime, getEarlierTrips = false) {
+	getTrips: function(dateTime = null, getEarlierTrips = false) {
 		var actionType = "GET_TRIPS";
 		var searchForArrival = 0;
 		var numTrips = 6;

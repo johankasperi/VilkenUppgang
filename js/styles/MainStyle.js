@@ -245,9 +245,10 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-    height: 150,
-    width: 100,
   },
+  mapCont: {
+    flex: 1,
+  }
 });
 
 module.exports = styles;

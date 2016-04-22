@@ -6,10 +6,10 @@ var {
 	Text,
 	StyleSheet,
 	Navigator,
-	TouchableHighlight,
-  MapView
+	TouchableHighlight
 } = React;
 
+var MapView = require('react-native-maps');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var NavigationBar = require('react-native-navbar');
 var TripStore = require('../stores/TripStore');
@@ -112,22 +112,17 @@ class Trip extends React.Component {
         coordinates.push({latitude: parseFloat(trip[i].Destination.lat), longitude: parseFloat(trip[i].Destination.lon)});
       }
       return (
-        <MapView
-        active={true}
-        style={styles.map}
-        region={{
-          latitude: middleLat,
-          longitude: middleLon,
-          latitudeDelta: lengthLat+0.1,
-          longitudeDelta: lengthLon+0.1
-        }}
-        showsUserLocation={true}
-        overlays={[{
-          coordinates: coordinates,
-          strokeColor: '#f007',
-          lineWidth: 3,
-        }]}
-      />
+        <View style={ styles.map }>
+  <MapView 
+    style={ styles.map }
+    initialRegion={{
+      latitude: middleLat,
+      longitude: middleLon,
+      latitudeDelta: lengthLat+0.1,
+      longitudeDelta: lengthLon+0.1,
+    }}
+  />
+  </View>
       )
     }
   
