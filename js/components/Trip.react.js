@@ -93,8 +93,8 @@ class Trip extends React.Component {
     var trip = this.state.trip.LegList.Leg;
     if(this.state.page == 1) {
       return (
-      <View style={styles.changesContainer}>
-        <View style={styles.timeline}>{this._renderTripChanges(trip)}</View>
+      <View style={styles.tripContainer}>
+        {this._renderTripChanges(trip)}
       </View>
       )
     }
@@ -106,11 +106,7 @@ class Trip extends React.Component {
       var middleLon = (parseFloat(trip[0].Origin.lon) + parseFloat(trip[trip.length-1].Destination.lon))/2;
       var lengthLat = Math.abs(parseFloat(trip[0].Origin.lat) - parseFloat(trip[trip.length-1].Destination.lat));
       var lengthLon = Math.abs(parseFloat(trip[0].Origin.lon) - parseFloat(trip[trip.length-1].Destination.lon));
-      var coordinates = [];
-      for(var i=0;i<trip.length;i++) {
-        coordinates.push({latitude: parseFloat(trip[i].Origin.lat), longitude: parseFloat(trip[i].Origin.lon)});
-        coordinates.push({latitude: parseFloat(trip[i].Destination.lat), longitude: parseFloat(trip[i].Destination.lon)});
-      }
+
       return (
         <View style={ styles.map }>
   <MapView 
@@ -121,11 +117,27 @@ class Trip extends React.Component {
       latitudeDelta: lengthLat+0.1,
       longitudeDelta: lengthLon+0.1,
     }}
-  />
+  >
+  {this._renderMapChanges(trip)}
+  </MapView>
   </View>
       )
     }
   
+  }
+
+  _renderMapChanges(trip) {
+    var coordinates = [];
+      for(var i=0;i<trip.length;i++) {
+        if(i==0) {
+          coordinates.push({latitude: parseFloat(trip[i].Origin.lat), longitude: parseFloat(trip[i].Origin.lon)});
+        }
+        coordinates.push({latitude: parseFloat(trip[i].Destination.lat), longitude: parseFloat(trip[i].Destination.lon)});
+      }
+      return(
+        <MapView.Polyline coordinates= {coordinates} />
+      )
+
   }
 
 	_renderTripChanges(trip) {
@@ -183,18 +195,38 @@ class Trip extends React.Component {
           type = "train";
         }
 				changes.push(
-					<View style={styles.changeContainer}>
-					  <View style={styles.rowContainer}><Text style={originTitle}> {trip[i].Origin.time} {trip[i].Origin.name}</Text></View>
-					  <View style={styles.journeyDetails}><Icon name={type} size={25} color={color} /><Text>{instructions}</Text></View>
-            <View style={styles.journeyDetails}><Text>{exitInfo}</Text></View>
-					  <View style={styles.rowContainer}><Text style={destinationTitle}> {trip[i].Destination.time} {trip[i].Destination.name}</Text></View>
-					  <Text style={styles.bulletPoint}>•</Text>
+					<View style={styles.tripRow}>
+            <View style={i == 0 ? styles.firstTripRight : styles.tripRight}>
+              <View style={styles.journeyDetails}><Icon name={type} size={25} color={color} /><Text style={styles.wrap}>{instructions}</Text></View>
+            </View>
+            {this._renderIfFirstTitle(trip, i)}
+            {this._renderIfFirstCircle(trip, i)}
+            <Text style={i == 0 ? styles.firstOriginTime : styles.originTime}>{trip[i].Origin.time}</Text>
+            <Text style={i == trip.length-1 ? styles.lastDestTime : styles.destTime}>{trip[i].Destination.time}</Text>
+            <Text style={i == trip.length-1 ? styles.lastDestText : styles.destText}>{trip[i].Destination.name}</Text>
+            <View style={styles.rightCircle}></View>
 					</View>
 				);
 			}
 		}
 		return changes;
 	}
+
+  _renderIfFirstTitle (trip, i) {
+    if(i == 0){
+      return (
+          <Text style={styles.originText}>{trip[0].Origin.name}</Text>
+      )
+    }
+  }
+
+  _renderIfFirstCircle (trip, i) {
+    if(i == 0){
+      return (
+          <View style={styles.firstCircle}></View>
+      )
+    }
+  }
 
 	_capitalizeFirstLetter(string) {
     	return string.charAt(0).toUpperCase() + string.slice(1);

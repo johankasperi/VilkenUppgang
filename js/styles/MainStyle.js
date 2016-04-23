@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
   },
   wrap: {
     flexWrap: 'wrap',
+    flex: 1,
   },
   flowRight: {
     flexDirection: 'row',
@@ -90,8 +91,8 @@ const styles = StyleSheet.create({
   searchListRowText: {
     fontSize: 18,
   },
-  searchHistoryText: {
-    flexWrap: 'wrap'
+  centerText: {
+    textAlign: 'center'
   },
   datePickerWrap: {
     flex: 1
@@ -200,9 +201,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   journeyDetails: {
+    flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
-    paddingLeft: 10,
+    padding: 10,
   },
   originTitle: {
     backgroundColor: 'rgba(0,0,0,0)',
@@ -248,7 +250,128 @@ const styles = StyleSheet.create({
   },
   mapCont: {
     flex: 1,
-  }
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 0.7,
+    borderBottomColor: '#CCCCCC'
+  },
+  left: {
+    flex: 1,
+  },
+  right: {
+    flex: 1,
+  },
+  rowContainer: {
+    flex: 1,
+  },
+  tripContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingTop: 20,
+  },
+  tripRight: {
+    flex:1,
+    marginLeft: 75,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    borderLeftWidth: 4,
+    borderLeftColor: "#CCCCCC",
+  },
+  firstTripRight: {
+    flex:1,
+    marginLeft: 75,
+    padding: 20,
+    borderLeftWidth: 4,
+    borderLeftColor: "#CCCCCC",
+  },
+  tripLast: {
+    flex:1,
+    marginLeft: 75,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 0,
+    borderLeftWidth: 4,
+    borderLeftColor: "#CCCCCC",
+  },
+  tripLeft: {
+    width: 75,
+  },
+  tripRow: {
+    //flex:1,
+    flexDirection: "row",
+  },
+  rightCircle: {
+    justifyContent: "flex-start",
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#4F8EF7",
+    position: "absolute",
+    bottom: 0,
+    left: 67,
+  },
+  firstCircle: {
+    justifyContent: "flex-start",
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#4F8EF7",
+    position: "absolute",
+    top: 0,
+    left: 67,
+  },
+  originTime: {
+    position: 'absolute',
+    top: -5,
+    left: 10,
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  firstOriginTime: {
+    position: 'absolute',
+    top: 0,
+    left: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  destTime: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    fontSize: 12,
+  },
+  lastDestTime: {
+    position: 'absolute',
+    bottom: 0,
+    left: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  destText: {
+    position: 'absolute',
+    bottom: 0,
+    left: 95,
+    fontSize: 14,
+  },
+  lastDestText: {
+    position: 'absolute',
+    bottom: 0,
+    left: 95,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  originText: {
+    position: 'absolute',
+    top: 0,
+    left: 95,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
 });
 
 module.exports = styles;

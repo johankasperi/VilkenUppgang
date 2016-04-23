@@ -55,13 +55,13 @@ class TripHistory extends Component {
   _renderRow(rowData) {
     return (
       <TouchableHighlight onPress={()=>this._setActive(rowData.id)} underlayColor="#FFFFFF">
-        <View style={styles.tripsRow}>
-          <View style={[styles.tripsColumn, styles.changesRow]}>
-            <Text style={styles.searchHistoryText}>{this._formatPlaceName(rowData.from.name)}</Text>
+        <View style={styles.row}>
+          <View style={styles.left}>
+            <Text style={styles.centerText}>{this._formatPlaceName(rowData.from.name)}</Text>
           </View>
           <View style={[styles.tripsColumnMid, styles.changesRow]}><Icon name="trending-flat" size={30} color="#CCCCCC"></Icon></View>
-          <View style={[styles.tripsColumnRight, styles.changesRow]}>
-            <Text style={styles.searchHistoryText}>{this._formatPlaceName(rowData.to.name)}</Text>
+          <View style={styles.right}>
+            <Text style={styles.centerText}>{this._formatPlaceName(rowData.to.name)}</Text>
           </View>
         </View>
       </TouchableHighlight>
