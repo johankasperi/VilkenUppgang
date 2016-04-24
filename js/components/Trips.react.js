@@ -173,9 +173,9 @@ class Trips extends React.Component {
           leftButton={this._renderLeftButton()}/>
   			<View style={styles.listContainer}>
   			  <View style={styles.header}>
-            <Text style={styles.headerTitle}>{this.state.origin} </Text>
+            <Text style={styles.headerTitle}>{this._formatPlaceName(this.state.origin)} </Text>
             <View><Icon name="trending-flat" size={25} color="#FFFFFF" /></View>
-            <Text style={styles.headerTitle}> {this.state.destiantion}</Text>
+            <Text style={styles.headerTitle}> {this._formatPlaceName(this.state.destiantion)}</Text>
           </View>
   	      {this._renderContent()}
   		  </View>
@@ -316,6 +316,10 @@ class Trips extends React.Component {
           </TouchableHighlight>
           </View>
       )
+  }
+
+  _formatPlaceName(name) {
+    return name.replace(/ *\([^)]*\) */g, "");
   }
 
 }

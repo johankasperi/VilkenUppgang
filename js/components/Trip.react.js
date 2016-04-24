@@ -105,9 +105,10 @@ class Trip extends React.Component {
     else if(this.state.page == 2) {
       var exits = [];
       for(var i=0;i<trip.length;i++) {
-        if("exitInfo" in trip[i]) {
+        if(trip[i].exitInfo != null) {
+          var color = lineColors[parseInt(trip[i].line)];
           exits.push(
-            <Text>Vid {trip[i].Destination.name} ta uppgånen {trip[i].exitInfo.exitName}</Text>
+            <View style={styles.row}><Icon name="subway" size={25} color={color} /><Text style={styles.wrap}> Vid <Text style={styles.fontBold}>{trip[i].Destination.name}</Text> ta uppgången <Text style={styles.fontBold}>{trip[i].exitInfo.exitName}</Text> </Text></View>
           );
         }
       }
