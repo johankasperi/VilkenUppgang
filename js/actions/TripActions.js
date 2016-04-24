@@ -2,6 +2,7 @@
 
 var _ = require('underscore');
 var DesiredTripStore = require('../stores/DesiredTripStore');
+var TripStore = require('../stores/TripStore');
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 const apiKey = '886e10690ad4421b96ee3f53945a84cd';
 
@@ -150,6 +151,16 @@ module.exports = {
 
 	setTrip: function() {
 		AppDispatcher.dispatch({actionType: "SET_TRIP", state: "ready", trip: trip});
-	}
+	},
 
+	getCoordinates: function(ref, tripId, idx) {
+		var query = "http://api.sl.se/api2/TravelplannerV2/geometry.json?key=" + apiKey + "&" + ref;
+		console.log(query);
+		fetch(query, {method: "GET"})
+    .then((response) => response.json())
+    .then((responseData) => {
+      AppDispatcher.dispatch({actionType: "GET_COORDINATES", state: "ready", data: responseData, legId: idx, tripId: tripId});
+    })
+    .done();
+	}
 }

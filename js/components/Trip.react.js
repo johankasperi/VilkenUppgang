@@ -34,6 +34,10 @@ class Trip extends React.Component {
 	    trip: TripStore.getTrip(props.tripIdx),
       page: 1
 	  };
+    for(var i=0;i<this.state.trip.LegList.Leg.length;i++) {
+      var trip = this.state.trip.LegList.Leg[i];
+      TripActions.getCoordinates(trip.GeometryRef.ref, props.tripIdx, i);
+    }
 	  this._onChange = this._onChange.bind(this);
 	}
 
@@ -99,44 +103,58 @@ class Trip extends React.Component {
       )
     }
     else if(this.state.page == 2) {
-
+      var exits = [];
+      for(var i=0;i<trip.length;i++) {
+        if("exitInfo" in trip[i]) {
+          exits.push(
+            <Text>Vid {trip[i].Destination.name} ta uppgånen {trip[i].exitInfo.exitName}</Text>
+          );
+        }
+      }
+      return (
+        <View style={styles.changesContainer}>{exits}</View>
+      )
     }
     else if(this.state.page == 3) {
+      var markers = [];
       var middleLat = (parseFloat(trip[0].Origin.lat) + parseFloat(trip[trip.length-1].Destination.lat))/2;
       var middleLon = (parseFloat(trip[0].Origin.lon) + parseFloat(trip[trip.length-1].Destination.lon))/2;
       var lengthLat = Math.abs(parseFloat(trip[0].Origin.lat) - parseFloat(trip[trip.length-1].Destination.lat));
       var lengthLon = Math.abs(parseFloat(trip[0].Origin.lon) - parseFloat(trip[trip.length-1].Destination.lon));
+      var coordinates = [];
+      for(var i=0;i<trip.length;i++) {
+        markers.push(<MapView.Marker title={trip[i].Origin.name} coordinate={{latitude: parseFloat(trip[i].Origin.lat), longitude: parseFloat(trip[i].Origin.lon)}} />);
+        markers.push(<MapView.Marker title={trip[i].Destination.name} coordinate={{latitude: parseFloat(trip[i].Destination.lat), longitude: parseFloat(trip[i].Destination.lon)}} />);
+        if("GeometryPoints" in trip[i]) {
+          for(var j=0;j<trip[i].GeometryPoints.Point.length;j++) {
+            coordinates.push({latitude: parseFloat(trip[i].GeometryPoints.Point[j].lat), longitude: parseFloat(trip[i].GeometryPoints.Point[j].lon)});
+          }
+        }
+      }
 
       return (
         <View style={ styles.map }>
-  <MapView 
-    style={ styles.map }
-    initialRegion={{
-      latitude: middleLat,
-      longitude: middleLon,
-      latitudeDelta: lengthLat+0.1,
-      longitudeDelta: lengthLon+0.1,
-    }}
-  >
-  {this._renderMapChanges(trip)}
-  </MapView>
-  </View>
+        <MapView 
+          style={ styles.map }
+          initialRegion={{
+            latitude: middleLat,
+            longitude: middleLon,
+            latitudeDelta: lengthLat+0.1,
+            longitudeDelta: lengthLon+0.1,
+          }}
+        >
+        <MapView.Polyline coordinates= {coordinates} strokeWidth={2} />
+        {markers}
+        {this._renderMapChanges(trip)}
+        </MapView>
+        </View>
       )
     }
   
   }
 
   _renderMapChanges(trip) {
-    var coordinates = [];
-      for(var i=0;i<trip.length;i++) {
-        if(i==0) {
-          coordinates.push({latitude: parseFloat(trip[i].Origin.lat), longitude: parseFloat(trip[i].Origin.lon)});
-        }
-        coordinates.push({latitude: parseFloat(trip[i].Destination.lat), longitude: parseFloat(trip[i].Destination.lon)});
-      }
-      return(
-        <MapView.Polyline coordinates= {coordinates} />
-      )
+    
 
   }
 
@@ -164,7 +182,6 @@ class Trip extends React.Component {
     		var color = "#CCCCCC";
 				instructions = this._capitalizeFirstLetter(trip[i].name) + " mot " + trip[i].dir;
 
-        console.log(trip[i]);
 				if(trip[i].type === "METRO") {
           color = lineColors[parseInt(trip[i].line)];
           type = "subway";

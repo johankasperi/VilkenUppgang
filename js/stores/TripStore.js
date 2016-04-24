@@ -3,6 +3,7 @@
 var AppDispatcher = require('../dispatchers/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var TripActions = require('../actions/TripActions');
 
 var CHANGE_EVENT = 'change';
 
@@ -21,6 +22,15 @@ var prependTrips = function(trips) {
   trips.pop();
   trips.push.apply(trips, _trips);
   _trips = trips;
+}
+
+var setTrip = function(trip, idx) {
+  _trips[idx] = trip;
+}
+
+var setCoordinates = function(tripId, legId, coordinates) {
+  console.log(_trips[tripId]);
+  _trips[tripId].LegList.Leg[legId]["GeometryPoints"] = coordinates.Geometry.Points;
 }
 
 var addExit = function(exitData) {
@@ -126,6 +136,12 @@ AppDispatcher.register(function(payload) {
     case "SET_EXIT":
       // TODO: Fixa en check om tomt
       addExit(payload.data);
+      TripStore.emitChange();
+      break;
+
+    case "GET_COORDINATES":
+      // TODO: Fixa en check om tomt
+      setCoordinates(payload.tripId, payload.legId, payload.data);
       TripStore.emitChange();
       break;
 
